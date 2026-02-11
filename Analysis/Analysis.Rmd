@@ -14,3 +14,27 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Read Trimming, Mapping, and SNP Calling
 
+Using dDocent
+Create a new working directory
+
+```{bash}
+cd /home/ccaillon
+mkdir RISG_dDocent_working
+cd RISG_dDocent_working
+```
+
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+conda init
+conda activate RISG_Seascape
+ln -s ../dDocent_ngs .  #link dDocent file into this new working directory
+ln -s ../../Shared_Data/RISG_Adults/final_demuliplexed_files_for_Coline/*.fq.gz . #link raw seq files into working directory
+ln -s ~/eager_obj1b/Genome/masked.* reference.fasta #link new haplotig masked genome into working directory
+```
+
+### Run dDocent_ngs
+```{bash}
+dDocent_ngs
+```
+
+
