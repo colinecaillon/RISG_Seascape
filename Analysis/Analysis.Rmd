@@ -90,7 +90,7 @@ cd /home/ccaillon/RISG_dDocent_working
 mkdir cleanedreads_fastqc_results
 cd cleanedreads_fastqc_results
 
-fastqc /home/ccaillon/RISG_dDocent_working/*.R1.fq.gz
+fastqc -o . /home/ccaillon/RISG_dDocent_working/*.R1.fq.gz
 fastqc -o . /home/ccaillon/RISG_dDocent_working/*.R2.fq.gz
 ```
 
