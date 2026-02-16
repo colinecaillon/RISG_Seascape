@@ -33,8 +33,76 @@ ln -s /home/Genomic_Resources/C_virginica/reference.fasta #link new haplotig mas
 ```
 
 ### Run dDocent_ngs
+First run dDocent_ngs with just Read Trimming
+
 ```{bash}
-dDocent_ngs
+./dDocent_ngs
+```
+
+dDocent 3.0.0 
+
+239 individuals are detected. Is this correct? Enter yes or no and press [ENTER]
+yes
+Proceeding with 60 individuals
+dDocent detects 80 processors available on this system.
+Please enter the maximum number of processors to use for this analysis.
+30
+
+Do you want to quality trim your reads?
+Type yes or no and press [ENTER]?
+yes
+
+Do you want to perform an assembly?
+Type yes or no and press [ENTER].
+no
+
+Reference contigs need to be in a file named reference.fasta
+
+Do you want to map reads?  Type yes or no and press [ENTER]
+no
+
+Mapping will not be performed
+Do you want to use FreeBayes to call SNPs?  Please type yes or no and press [ENTER]
+no
+
+Please enter your email address.  dDocent will email you when it is finished running.
+Don't worry; dDocent has no financial need to sell your email address to spammers.
+
+At this point, all configuration information has been entered and dDocent may take several hours to run.
+It is recommended that you move this script to a background operation and disable terminal input and output.
+All data and logfiles will still be recorded.
+To do this:
+Press control and Z simultaneously
+Type bg and press enter
+Type disown -h and press enter
+Now sit back, relax, and wait for your analysis to finish
+
+Trimming reads
+\
+dDocent has finished with an analysis in /home/ccaillon/RISG_dDocent_working
+dDocent started Thu Feb 12 11:31:49 EST 2026
+dDocent finished Thu Feb 12 12:03:38 EST 2026
+
+Running fastqc again to check quality of cleaned reads
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+
+mkdir cleanedreads_fastqc_results
+cd cleanedreads_fastqc_results
+
+ln -s ../*.fq.gz .
+
+fastqc *.R1.fq.gz
+fastqc *.R2.fq.gz
+```
+
+```{bash}
+multiqc .
+# Rename:
+mv multiqc_report.html cleanedreads_multiqc_report.html
 ```
 
 
+
+
+ 
