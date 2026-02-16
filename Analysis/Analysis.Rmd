@@ -90,10 +90,8 @@ cd /home/ccaillon/RISG_dDocent_working
 mkdir cleanedreads_fastqc_results
 cd cleanedreads_fastqc_results
 
-ln -s ../*.fq.gz .
-
-fastqc *.R1.fq.gz
-fastqc *.R2.fq.gz
+fastqc /home/ccaillon/RISG_dDocent_working/*.R1.fq.gz
+fastqc /home/ccaillon/RISG_dDocent_working/*.R2.fq.gz
 ```
 
 ```{bash}
