@@ -34,7 +34,7 @@ ln -s ../../Shared_Data/RISG_Adults/final_demuliplexed_files_for_Coline/*.fq.gz 
 ln -s /home/Genomic_Resources/C_virginica/reference.fasta #link new haplotig masked genome into working directory
 ```
 
-### Run dDocent_ngs
+### Read Trimming
 First run dDocent_ngs with just Read Trimming
 
 ```{bash}
@@ -102,7 +102,32 @@ multiqc .
 mv multiqc_report.html cleanedreads_multiqc_report.html
 ```
 
+### Read Mapping
+
+Make sure reference.fasta file is in the directory.
+Run dDocent just with read mapping. I'm going to use the default parameters as: A = 1, B = 4, and O = 6.
+
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+
+./dDocent_ngs
+```
+
+Checking for required software
+
+dDocent version 3.0.0 started Mon Feb 16 17:16:23 EST 2026 
+Proceeding with 239 individuals
 
 
+Do you want to perform an assembly?
 
+Do you want to map reads?  Type yes or no and press [ENTER]
+no
+To do this:
+Press control and Z simultaneously
+Type bg and press enter
+Type disown -h and press enter
+Now sit back, relax, and wait for your analysis to finish
+
+Using BWA to map reads
  
