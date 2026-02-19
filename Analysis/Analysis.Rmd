@@ -106,7 +106,7 @@ mv multiqc_report.html cleanedreads_multiqc_report.html
 ```
 
 MultiQC report can be viewed here.
-Everything looks good. All the sequences are in the green zone for quality, and even for adapter content. That one sample does have higher adapter content but it's still a very small percentage. I also don't think the over-represented sequences are problematic, since it's common for reduced representation sequencing to share common fragments. That being said, I looked back at my past multiqc reports and saw pretty low adapter content percentages after trimming (less than 0.2%) and didn't have an stats for over-represented sequences so I don't know for sure if this would have a significant impact on downstream analyses. I would keep an eye out on those samples that have higher adapter content as you move forward, or touch base with Jon if you're concerned about them.
+Everything looks good. All the sequences and adapter contents are in the green zone for quality check. All individuals have adapter content <1%, except MW_CB_3401 which does have higher adapter content but it's still a very small percentage (1.66%). MW_CB_3401 also have higher overrepresented sequences (red zone for quality check). It should not be problematic, since it's common for reduced representation sequencing to share common fragments. Keep an eye if these have significant impacts on MW_CB_3401 individual's downstream analyses.
 
 ## Read Mapping
 
