@@ -5,36 +5,39 @@ date: '2026-02-11'
 output: github_document
 ---
 
-Infos here
+Project infos here
 
 # Demultiplexing
 
-coming
+coming soon
 
 
 # Read Trimming, Mapping, and SNP Calling
 
-Create a new working directory for using dDocent 
+Create a new working directory for using dDocent (ref dDocent here)
 
 ```{bash}
 cd /home/ccaillon
 mkdir RISG_dDocent_working
 cd RISG_dDocent_working
+
+#activate working environment
+conda init
+conda activate RISG_Seascape
 ```
 
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
-conda init
-conda activate RISG_Seascape
 
-#create symbolic links:
+#create symbolic links
 ln -s /home/Shared_Data/ROD_CADO/analysis/dDocent_ngs #link dDocent file into this new working directory
 ln -s ../../Shared_Data/RISG_Adults/final_demuliplexed_files_for_Coline/*.fq.gz . #link raw seq files into working directory
 ln -s /home/Genomic_Resources/C_virginica/reference.fasta #link new haplotig masked genome into working directory
 ```
 
 ## Read Trimming
-First run dDocent_ngs with just Read Trimming
+
+First run dDocent_ngs for only Read Trimming.
 
 ```{bash}
 ./dDocent_ngs
@@ -103,12 +106,18 @@ mv multiqc_report.html cleanedreads_multiqc_report.html
 ```
 
 MultiQC report can be viewed here.
-
+Everything looks good. All the sequences are in the green zone for quality, and even for adapter content. That one sample does have higher adapter content but it's still a very small percentage. I also don't think the over-represented sequences are problematic, since it's common for reduced representation sequencing to share common fragments. That being said, I looked back at my past multiqc reports and saw pretty low adapter content percentages after trimming (less than 0.2%) and didn't have an stats for over-represented sequences so I don't know for sure if this would have a significant impact on downstream analyses. I would keep an eye out on those samples that have higher adapter content as you move forward, or touch base with Jon if you're concerned about them.
 
 ## Read Mapping
 
 Make sure reference.fasta file is in the directory.
+
+run dDocent again for the read mapping, as long as you run the program in the same directory where the R1 and R2 files are located, then you are all set! No need to run the trimming again.
+
 Run dDocent just with read mapping. I'm going to use the default parameters as: A = 1, B = 4, and O = 6.
+
+Run 
+
 
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
