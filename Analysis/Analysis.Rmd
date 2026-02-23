@@ -112,11 +112,13 @@ Everything looks good. All the sequences and adapter contents are in the green z
 
 Make sure reference.fasta file is in the directory.
 
-run dDocent again for the read mapping, as long as you run the program in the same directory where the R1 and R2 files are located, then you are all set! No need to run the trimming again.
+Run dDocent again for Read Mapping. Make sure to run the program in the same directory where the trimmed reads (R1 and R2) files are located, no need to run the trimming again.
+Reads are mapped (aligned to reference sequences) using the MEM algorithm of BWA and a scoring system to decide which alignment is best with 3 parameters: match score value (A), mismatch score (B), and gap opening penalty (O).
+I want to test out the optimal mapping parameter values before moving forward. Rather than running the dDocent mapping on all the samples, I'm going to save a subset of individuals into a new directory and perform the mapping test on that subset.
 
-Run dDocent just with read mapping. I'm going to use the default parameters as: A = 1, B = 4, and O = 6.
 
-Run 
+I'm going to use the default parameters as: A = 1, B = 4, and O = 6.
+
 
 
 ```{bash}
