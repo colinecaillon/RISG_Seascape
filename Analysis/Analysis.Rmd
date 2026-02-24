@@ -158,14 +158,14 @@ Test 2: Mapping parameter values as A=1, B=3, and O=5 (mostly used in Jonathan P
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
 #Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
-Outputs: These parameter values (A=1, B=3, and O=5) resulted in more passed reads, higher percentage of properly paired reads, and a lower percentage of singletons compared with Test 1 (default parameters)..
+Outputs: These parameter values (A=1, B=3, and O=5) resulted in more passed reads, higher percentage of properly paired reads, and a lower percentage of singletons compared with Test 1 (default parameters).
 
-Test 3: Mapping parameter values as A=2, B=4, and O=6 (optimal parameters of Amy Zyck on Seascape Genomics project)
+Test 3: Mapping parameter values as A=2, B=4, and O=6 (optimal parameters of Amy Zyck on NB Seascape Genomics project)
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
 #Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
-Outputs:
+Outputs: Even more passed reads, higher percentage of properly paired reads, and a lower percentage of singletons than Test 2.
 
 Test 4: Mapping parameter values as A=3, B=5, and O=7 (higher values than the default for all three parameters)
 ```{bash}
