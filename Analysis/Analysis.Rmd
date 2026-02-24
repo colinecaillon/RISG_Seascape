@@ -131,17 +131,14 @@ cd /home/ccaillon/RISG_dDocent_working
 mkdir mapping_test
 cd mapping_test
 
-mkdir Test_1
-cd Test_1
-
-ln -s ../../BIS_NB_1.* .
-ln -s ../../PVD_NB_1.* .
-ln -s ../../CS_DB_3000.* .
-ln -s ../../HC_DB_3031.* .
-ln -s ../../HI_CB_3151.* .
-ln -s ../../MW_CB_3391.* .
-ln -s ../../reference.fasta .
-ln -s ../../dDocent_ngs .
+ln -s ../BIS_NB_1.* .
+ln -s ../PVD_NB_1.* .
+ln -s ../CS_DB_3000.* .
+ln -s ../HC_DB_3031.* .
+ln -s ../HI_CB_3151.* .
+ln -s ../MW_CB_3391.* .
+ln -s ../reference.fasta .
+ln -s ../dDocent_ngs .
 ```
 
 ```{bash}
@@ -157,9 +154,6 @@ Test 2: Mapping parameter values as A=1, B=3, and O=5 (widely used in Jonathan P
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
 
-mkdir Test_2
-cd Test_2
-
 ln -s ../../BIS_NB_1.* .
 ln -s ../../PVD_NB_1.* .
 ln -s ../../CS_DB_3000.* .
@@ -173,9 +167,6 @@ ln -s ../../dDocent_ngs .
 Test 3: Mapping parameter values as A=2, B=4, and O=6 (optimal parameters of Amy Zyck on Seascape Genomics project)
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-mkdir Test_3
-cd Test_3
 
 ln -s ../../BIS_NB_1.* .
 ln -s ../../PVD_NB_1.* .
@@ -191,9 +182,6 @@ Test 4: Mapping parameter values as A=3, B=5, and O=7 (higher values than the de
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
 
-mkdir Test_4
-cd Test_4
-
 ln -s ../../BIS_NB_1.* .
 ln -s ../../PVD_NB_1.* .
 ln -s ../../CS_DB_3000.* .
@@ -207,9 +195,6 @@ ln -s ../../dDocent_ngs .
 Test 5: Mapping parameter values as A=2, B=3, and O=5
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-mkdir Test_5
-cd Test_5
 
 ln -s ../../BIS_NB_1.* .
 ln -s ../../PVD_NB_1.* .
