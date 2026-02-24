@@ -113,11 +113,43 @@ Everything looks good. All the sequences and adapter contents are in the green z
 Make sure reference.fasta file is in the directory.
 
 Run dDocent again for Read Mapping. Make sure to run the program in the same directory where the trimmed reads (R1 and R2) files are located, no need to run the trimming again.
-Reads are mapped (aligned to reference sequences) using the MEM algorithm of BWA and a scoring system to decide which alignment is best with 3 parameters: match score value (A), mismatch score (B), and gap opening penalty (O).
+Reads are mapped (aligned to reference sequences) using the MEM algorithm of BWA and a scoring system to decide which alignment is best with three parameters: match score value (A), mismatch score (B), and gap opening penalty (O).
 I want to test out the optimal mapping parameter values before moving forward. Rather than running the dDocent mapping on all the samples, I'm going to save a subset of individuals into a new directory and perform the mapping test on that subset.
+Two individuals are selected per bay: one from a population located at the mouth of the bay and one from an upper-bay population, in order to represent a wide spatial gradient.
+Sites/Individuals: 
+- BIS_NB_1
+- PVD_NB_1
+- CS_DB_3000
+- HC_DB_3031
+- HI_CB_3151
+- MW_CB_3391
+Use samtools flagstats on individual sample files too see how well the mapping worked. I look for which parameters result in the highest percentage of properly paired and lowest percentage of singletons.
 
+Test 1: I'm going to use the default mapping parameters as A = 1, B = 4, and O = 6.
 
-I'm going to use the default parameters as: A = 1, B = 4, and O = 6.
+```{bash}
+mkdir mapping_test
+cd mapping_test
+
+ln -s ../BIS_NB_1.* .
+ln -s ../PVD_NB_1.* .
+ln -s ../CS_DB_3000.* .
+ln -s ../HC_DB_3031.* .
+ln -s ../HI_CB_3151.* .
+ln -s ../MW_CB_3391.* .
+ln -s ../reference.fasta .
+ln -s ../dDocent_ngs .
+```
+
+```{bash}
+samtools flagstats -@16 BIS_NB_1.F.bam #change the threads with -@16 to make things run faster
+samtools flagstats -@16 PVD_NB_1.F.bam
+samtools flagstats -@16 CS_DB_3000.F.bam
+samtools flagstats -@16 HC_DB_3031.F.bam
+samtools flagstats -@16 HI_CB_3151.F.bam
+samtools flagstats -@16 MW_CB_3391.F.bam
+```
+
 
 
 
