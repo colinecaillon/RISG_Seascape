@@ -21,7 +21,7 @@ cd /home/ccaillon
 mkdir RISG_dDocent_working
 cd RISG_dDocent_working
 
-#activate working environment
+#Activate working environment
 conda init
 conda activate RISG_Seascape
 ```
@@ -29,7 +29,7 @@ conda activate RISG_Seascape
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
 
-#create symbolic links
+#Create symbolic links
 ln -s /home/Shared_Data/ROD_CADO/analysis/dDocent_ngs #link dDocent file into this new working directory
 ln -s ../../Shared_Data/RISG_Adults/final_demuliplexed_files_for_Coline/*.fq.gz . #link raw seq files into working directory
 ln -s /home/Genomic_Resources/C_virginica/reference.fasta #link new haplotig masked genome into working directory
@@ -101,7 +101,7 @@ fastqc -o . /home/ccaillon/RISG_dDocent_working/*.R2.fq.gz
 
 ```{bash}
 multiqc .
-# Rename:
+#Rename:
 mv multiqc_report.html cleanedreads_multiqc_report.html
 ```
 
@@ -143,6 +143,7 @@ ln -s ../dDocent_ngs .
 ./dDocent_ngs
 ```
 
+Use samtools flagstats to investigate bam files
 ```{bash}
 samtools flagstats -@16 BIS_NB_1.F.bam #change the threads with -@16 to make things run faster
 samtools flagstats -@16 PVD_NB_1.F.bam
@@ -152,33 +153,34 @@ samtools flagstats -@16 HI_CB_3151.F.bam
 samtools flagstats -@16 MW_CB_3391.F.bam
 ```
 
-Test 2: Mapping parameter values as A=1, B=3, and O=5 (widely used in Jonathan Puritz's lab)
+Test 2: Mapping parameter values as A=1, B=3, and O=5 (mostly used in Jonathan Puritz's lab)
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-./dDocent_ngs
+#Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
+Outputs: These parameter values (A=1, B=3, and O=5) resulted in more passed reads, higher percentage of properly paired reads, and a lower percentage of singletons compared with Test 1 (default parameters)..
 
 Test 3: Mapping parameter values as A=2, B=4, and O=6 (optimal parameters of Amy Zyck on Seascape Genomics project)
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-./dDocent_ngs
+#Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
+Outputs:
 
 Test 4: Mapping parameter values as A=3, B=5, and O=7 (higher values than the default for all three parameters)
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-./dDocent_ngs
+#Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
+Outputs: 
 
 Test 5: Mapping parameter values as A=2, B=3, and O=5
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
-
-./dDocent_ngs
+#Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
+Outputs:
+
 
 
 
