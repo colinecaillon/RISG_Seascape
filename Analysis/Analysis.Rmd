@@ -150,6 +150,7 @@ samtools flagstats -@16 HI_CB_3151.F.bam
 samtools flagstats -@16 MW_CB_3391.F.bam
 ```
 
+Test 2: Mapping parameter values as A=1, B=3, and O=5
 
 
 
