@@ -182,7 +182,7 @@ cd /home/ccaillon/RISG_dDocent_working/mapping_test
 Outputs:
 
 
-
+Test 6: Mapping parameter values as A=2, B=5, and O=7
 
 
 
