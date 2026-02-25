@@ -107,6 +107,7 @@ mv multiqc_report.html cleanedreads_multiqc_report.html
 
 MultiQC report can be viewed here.
 Everything looks good. All the sequences and adapter contents are in the green zone for quality check. All individuals have adapter content <1%, except MW_CB_3401 which does have higher adapter content but it's still a very small percentage (1.66%). MW_CB_3401 also have higher overrepresented sequences (red zone for quality check). It should not be problematic, since it's common for reduced representation sequencing to share common fragments. Keep an eye if these have significant impacts on MW_CB_3401 individual's downstream analyses.
+Conclusion after meeting with Jon: More reads are linked to more adapter contents, and because these adapter contents are repetitive sequences it's also linked to higher overrepresented sequences. Typically, if a sample has more adapter content than others, that can means that the quality of the DNA was not as good going in, and so it ends up with shorter fragments. And the higher adapter content is linked to more overrepresented sequences because PCR biases favor smaller fragments. Jon confirms this is not a concern to have such low levels of adapter contents (2% or less) for downstream analyses.
 
 ## Read Mapping
 
@@ -179,29 +180,28 @@ Test 5: Mapping parameter values as A=2, B=3, and O=5
 cd /home/ccaillon/RISG_dDocent_working/mapping_test
 #Run again dDocent in mapping_test directory with the new mapping parameters.
 ```
-Outputs:
-
+Outputs: Even less passed reads than Test 4, but highest percentage of properly paired and lowest percentage of singletons among all test.
 
 Test 6: Mapping parameter values as A=2, B=5, and O=7
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working/mapping_test
+#Run again dDocent in mapping_test directory with the new mapping parameters.
+```
+Outputs: Highest passed reads among all tests, but percentage of properly paired reads and singletons not as good as Test 3.
 
+Conclusion of outputs:
+Add table resuming outputs here.
+Mapping parameter values A=2, B=4, O=6 is the best option. Even if Test 3 (Amy Zyck's optimal parameters: A=2, B=4, O=6) doesn't top every individual metric, selecting for the best overall compromise across passed reads, properly paired reads, and singleton rates is the right approach for downstream consistency.
 
-
+Run again dDocent_ngs in the main working directory using the optimal mapping parameter values A=2, B=4, O=6
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
 
 ./dDocent_ngs
 ```
 
-Checking for required software
-
-dDocent version 3.0.0 started Mon Feb 16 17:16:23 EST 2026 
-Proceeding with 239 individuals
 
 
-Do you want to perform an assembly?
-
-Do you want to map reads?  Type yes or no and press [ENTER]
-no
 To do this:
 Press control and Z simultaneously
 Type bg and press enter
