@@ -196,12 +196,49 @@ Mapping parameter values A=2, B=4, O=6 is the best option. Even if Test 3 (Amy Z
 Run again dDocent_ngs in the main working directory using the optimal mapping parameter values A=2, B=4, O=6
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
-
 ./dDocent_ngs
 ```
 
+dDocent 3.0.0 
 
+239 individuals are detected. Is this correct? Enter yes or no and press [ENTER]
+yes
+Proceeding with 60 individuals
+dDocent detects 80 processors available on this system.
+Please enter the maximum number of processors to use for this analysis.
+30
 
+Do you want to quality trim your reads?
+Type yes or no and press [ENTER]?
+no
+
+Do you want to perform an assembly?
+Type yes or no and press [ENTER].
+no
+
+Reference contigs need to be in a file named reference.fasta
+
+Do you want to map reads?  Type yes or no and press [ENTER]
+yes
+BWA will be used to map reads.  You may need to adjust -A -B and -O parameters for your taxa.
+Would you like to enter a new parameters now? Type yes or no and press [ENTER]
+yes
+Please enter new value for A (match score).  It should be an integer.  Default is 1.
+2
+Please enter new value for B (mismatch score).  It should be an integer.  Default is 4.
+4
+Please enter new value for O (gap penalty).  It should be an integer.  Default is 6.
+6
+
+Do you want to use FreeBayes to call SNPs?  Please type yes or no and press [ENTER]
+no
+
+Please enter your email address.  dDocent will email you when it is finished running.
+Don't worry; dDocent has no financial need to sell your email address to spammers.
+
+At this point, all configuration information has been entered and dDocent may take several hours to run.
+It is recommended that you move this script to a background operation and disable terminal input and output.
+All data and logfiles will still be recorded.
 To do this:
 Press control and Z simultaneously
 Type bg and press enter
@@ -209,4 +246,57 @@ Type disown -h and press enter
 Now sit back, relax, and wait for your analysis to finish
 
 Using BWA to map reads
+
+dDocent has finished with an analysis in /home/ccaillon/RISG_dDocent_working
+dDocent started Wed Feb 25 10:58:32 EST 2026
+dDocent finished Thu Feb 26 22:57:35 EST 2026
+
+## SNP Calling
+
+Run dDocent again to call variants using FreeBayes. FreeBayes is a Bayesian-based variant detection program that uses assembled haplotype sequences to simultaneously call SNPs, INDELS, multi-nucleotide polymorphisms (MNPs), and complex events (composite insertion and substitution events) from alignment files (.bam files). At the end, raw SNP calls are concatenated into a single variant call file (VCF) using VCFtools.
+
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+./dDocent_ngs
+```
+
+dDocent version 3.0.0 started Fri Feb 27 08:54:38 EST 2026 
+
+239 individuals are detected. Is this correct? Enter yes or no and press [ENTER]
+Proceeding with 239 individuals
+dDocent detects 80 processors available on this system.
+Please enter the maximum number of processors to use for this analysis.
+30
+
+Do you want to quality trim your reads?
+Type yes or no and press [ENTER]?
+no
+
+Do you want to perform an assembly?
+Type yes or no and press [ENTER].
+no
+
+Reference contigs need to be in a file named reference.fasta
+
+Do you want to map reads?  Type yes or no and press [ENTER]
+no
+Mapping will not be performed
+
+Do you want to use FreeBayes to call SNPs?  Please type yes or no and press [ENTER]
+yes
+
+Please enter your email address.  dDocent will email you when it is finished running.
+Don't worry; dDocent has no financial need to sell your email address to spammers.
+
+To do this:
+Press control and Z simultaneously
+Type bg and press enter
+Type disown -h and press enter
+Now sit back, relax, and wait for your analysis to finish
+
+Using FreeBayes to call SNPs
+
+
+
+
  
