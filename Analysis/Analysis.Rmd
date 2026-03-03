@@ -296,7 +296,12 @@ Now sit back, relax, and wait for your analysis to finish
 
 Using FreeBayes to call SNPs
 
+dDocent has finished with an analysis in /home/ccaillon/RISG_dDocent_working
+dDocent started Fri Feb 27 08:54:38 EST 2026
+dDocent finished Tue Mar 3 00:51:21 EST 2026 (~88hours)
 
+After filtering, kept 25955636 out of a possible 70386649 Sites
 
+## SNP Filtering
 
  
