@@ -304,4 +304,23 @@ After filtering, kept 25955636 out of a possible 70386649 Sites
 
 ## SNP Filtering
 
- 
+Make a new directory within RISG_dDocent_working
+
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+mkdir RISG_SNPFiltering_working
+cd RISG_SNPFiltering_working
+
+#Link Raw VCF file to new directory
+ln -s ../TotalRawSNPs.vcf.gz .
+```
+Let’s start by applying two step filter: only keep variants that have been successfully genotyped in 50% of individuals (filter genotypes called below 50% across all individuals), and a minimum quality score of 20.
+
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working/RISG_SNPFiltering_working
+vcftools --gzvcf TotalRawSNPs.vcf.gz --max-missing 0.5 --minQ 20 --recode --recode-INFO-all --out TRS.mm50mq20
+```
+
+
+
+
