@@ -320,7 +320,7 @@ Let’s start by applying two step filter: only keep variants that have been suc
 cd /home/ccaillon/RISG_dDocent_working/RISG_SNPFiltering_working
 vcftools --gzvcf TotalRawSNPs.vcf.gz --max-missing 0.5 --minQ 20 --recode --recode-INFO-all --out TRS.mm50mq20
 ```
-
-
-
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
 
