@@ -326,7 +326,7 @@ Outputting VCF file...
 The next filter will apply a minimum depth of 10 reads for a genotype call 
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/RISG_SNPFiltering_working
-vcftools --vcf TRS.m50q20.recode.vcf --minDP 10 --recode --recode-INFO-all --out TRS.m50q20dp10
+vcftools --vcf RS.m50q20.recode.vcf --minDP 10 --recode --recode-INFO-all --out RS.m50q20dp10
 ```
 
 
