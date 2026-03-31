@@ -304,6 +304,22 @@ After filtering, kept 25955636 out of a possible 70386649 Sites
 
 ## SNP Filtering
 
+Use PVCF_filter.sh script as a first step filter, it's going to be faster. This script automatically filters genotype calls based on several criteria: genotypes with less than 50% presence across all individuals, a minimum quality score of 20, and a minimum read depth of 10. It also separates nDNA (nuclear DNA) from mtDNA (mitochondrial DNA). Downstream analyses continue with nDNA, separating SNPs and INDELs while retaining only the SNPs.
+
+```{bash}
+#We need to run this script within the new directory raw.vcf created by dDocent
+cd /home/ccaillon/RISG_dDocent_working/raw.vcf
+
+#Copy the PVCF_filter.sh script from ROD_CADO directory
+cp /home/Shared_Data/ROD_CADO/analysis/raw.vcf/PVCF_filter.sh /home/ccaillon/RISG_dDocent_working/raw.vcf/
+
+#Run
+./PVCF_filter.sh TRS 20
+```
+
+
+
+
 Make a new directory within RISG_dDocent_working
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
@@ -314,20 +330,7 @@ cd RISG_SNPFiltering_working
 ln -s ../TotalRawSNPs.vcf.gz .
 ```
 
-Let’s start by applying two step filter: only keep variants that have been successfully genotyped in 50% of individuals (filter genotypes called below 50% across all individuals), and a minimum quality score of 20.
-```{bash}
-cd /home/ccaillon/RISG_dDocent_working/RISG_SNPFiltering_working
-vcftools --gzvcf TotalRawSNPs.vcf.gz --max-missing 0.5 --minQ 20 --recode --recode-INFO-all --out TRS.m50q20
-```
-Output:
-After filtering, kept 239 out of 239 Individuals
-Outputting VCF file...
 
-The next filter will apply a minimum depth of 10 reads for a genotype call 
-```{bash}
-cd /home/ccaillon/RISG_dDocent_working/RISG_SNPFiltering_working
-vcftools --vcf RS.m50q20.recode.vcf --minDP 10 --recode --recode-INFO-all --out RS.m50q20dp10
-```
 
 
 
