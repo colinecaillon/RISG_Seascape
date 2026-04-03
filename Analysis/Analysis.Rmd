@@ -304,7 +304,7 @@ After filtering, kept 25955636 out of a possible 70386649 Sites
 
 ## SNP Filtering
 
-Use PVCF_filter.sh script as a first step filter, it's going to be faster. This script automatically filters genotype calls based on several criteria: genotypes with less than 50% presence across all individuals, a minimum quality score of 20, and a minimum read depth of 10. It also separates nDNA (nuclear DNA) from mtDNA (mitochondrial DNA). Downstream analyses continue with nDNA, separating SNPs and INDELs while retaining only the SNPs.
+Use PVCF_filter.sh script as a first step filter, it's going to be faster. This script automatically filters genotype calls based on several criteria: genotypes with less than 75% presence across all individuals, a minimum quality score of 20, and a minimum read depth of 5. It also separates nDNA (nuclear DNA) from mtDNA (mitochondrial DNA). Downstream analyses continue with nDNA, separating SNPs and INDELs while retaining only the SNPs.
 
 ```{bash}
 #We need to run this script within the new directory raw.vcf created by dDocent
@@ -313,11 +313,16 @@ cd /home/ccaillon/RISG_dDocent_working/raw.vcf
 #Copy the PVCF_filter.sh script from ROD_CADO directory
 cp /home/Shared_Data/ROD_CADO/analysis/raw.vcf/PVCF_filter.sh /home/ccaillon/RISG_dDocent_working/raw.vcf/
 
+#Activate working environment
+conda activate RISG_Seascape
+
 #Run
 ./PVCF_filter.sh TRS 20
 ```
 
-
+rm: cannot remove ‘SNP.TRS.TRSdp5g75.nDNA.Collated.g1.maf01.max2alleles.*.FIL.bcf’: No such file or directory
+mv: cannot stat ‘SNP.TRS.TRSdp5g75.nDNA.*.*.FIL.vcf.gz’: No such file or directory
+Filter stats and filtered VCF files stored in TRS.TRSdp5g75.nDNA.filterstats
 
 
 Make a new directory within RISG_dDocent_working
