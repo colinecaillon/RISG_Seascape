@@ -335,6 +335,96 @@ conda activate ROD_CADO
 ./PVCF_filter.sh TRS 20
 ```
 
+[main_vcfview] Error: cannot write to (null)
+This script will automatically filter a FreeBayes generated VCF file using criteria related to site depth,
+quality versus depth, allelic balance at heterzygous individuals, and paired read representation.
+The script assumes that loci and individuals with low call rates (or depth) have already been removed. 
+
+Number of sites filtered based on allele balance at heterozygous loci, locus quality, and mapping quality / Depth
+ 190133 of 2092541 
+ 
+Number of additional sites filtered based on properly paired status
+ 8110 of 1902408 
+
+Number of sites filtered based on high depth and lower than 2*DEPTH quality score
+ 338665 of 1902408 
+ 
+[main_vcfview] Error: cannot write to (null)
+
+                                                                                                                        
+                                                                                                                        
+                                                Histogram of mean depth per site                                        
+     180000 +-------------------------------------------------------------------------------------------------------+   
+            |*****    +     +    +    +    +    +     +    +    +    +    +     +    +    +    +    +     +    +    |   
+            |    *                                        'meandepthpersite' using (bin($1,binwidth)):(1.0) ******* |   
+     160000 |-+  *                                                                                                +-|   
+            |    *                                                                                                  |   
+     140000 |-+  *                                                                                                +-|   
+            |    ******                                                                                             |   
+            |    *    *                                                                                             |   
+     120000 |-+  *    *                                                                                           +-|   
+            |    *    *******                                                                                       |   
+     100000 |-+  *    *     *                                                                                     +-|   
+            |    *    *     *                                                                                       |   
+            |    *    *     ******                                                                                  |   
+      80000 |-+  *    *     *    *                                                                                +-|   
+            |    *    *     *    ******                                                                             |   
+      60000 |-+  *    *     *    *    ******                                                                      +-|   
+            |    *    *     *    *    *    *                                                                        |   
+            |    *    *     *    *    *    ************                                                             |   
+      40000 |-+  *    *     *    *    *    *    *     *                                                           +-|   
+            |    *    *     *    *    *    *    *     *                                                             |   
+      20000 |-+  *    *     *    *    *    *    *     *                                                           +-|   
+            |    *    *     *    *    *    *    *     *                                                             |   
+            |    *    *     *    *    *    *    *     ******************************************    +     +    +    |   
+          0 +-------------------------------------------------------------------------------------------------------+   
+            10   11   12    13   14   15   16   17    18   19   20   21   22    23   24   25   26   27    28   29   30  
+                                                           Mean Depth                                                   
+                                                                                                                        
+The 95% cutoff would be 24
+Would you like to use a different maximum mean depth cutoff than 24, yes or no
+Maximum mean depth cutoff is 24
+no
+
+Number of sites filtered based on maximum mean depth
+ 79234 of 1555651 
+
+Total number of sites filtered
+ 616124 of 2092541 
+
+Remaining sites
+ 1476417 
+ 
+Variants will now be composed into SNPs and INDels
+
+Number of SNPs before filtering for call rate and minor allele frequency
+ 2636976 
+
+Number of INDels
+ 462075 
+
+Number of SNPs with 90% call rate, MAF of 0.01, and excess heterozygous loci removed
+
+Number of SNPs with 90% call rate, MAF of 0.05, and excess heterozygous loci removed
+
+Number of SNPs with 95% call rate, MAF of 0.01, and excess heterozygous loci removed
+ 
+Number of SNPs with 95% call rate, MAF of 0.05, and excess heterozygous loci removed
+
+Number of SNPs with 100% call rate, MAF of 0.01, and excess heterozygous loci removed
+
+Number of SNPs with 100% call rate, MAF of 0.05, and excess heterozygous loci removed
+ 
+Number of biallelic SNPs with 100% call rate, MAF of 0.01, and excess heterozygous loci removed
+ 
+Number of biallelic SNPs with 100% call rate, MAF of 0.05, and excess heterozygous loci removed
+
+
+
+
+
+
+
 rm: cannot remove ‘SNP.TRS.TRSdp5g75.nDNA.Collated.g1.maf01.max2alleles.*.FIL.bcf’: No such file or directory
 mv: cannot stat ‘SNP.TRS.TRSdp5g75.nDNA.*.*.FIL.vcf.gz’: No such file or directory
 Filter stats and filtered VCF files stored in TRS.TRSdp5g75.nDNA.filterstats
