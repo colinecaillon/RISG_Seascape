@@ -324,6 +324,17 @@ conda activate RISG_SNP_Filtering
 ./PVCF_filter.sh TRS 20
 ```
 
+```{bash}
+
+#Test 
+
+cd /home/ccaillon/RISG_dDocent_working/raw.vcf
+
+conda activate ROD_CADO
+
+./PVCF_filter.sh TRS 20
+```
+
 rm: cannot remove ‘SNP.TRS.TRSdp5g75.nDNA.Collated.g1.maf01.max2alleles.*.FIL.bcf’: No such file or directory
 mv: cannot stat ‘SNP.TRS.TRSdp5g75.nDNA.*.*.FIL.vcf.gz’: No such file or directory
 Filter stats and filtered VCF files stored in TRS.TRSdp5g75.nDNA.filterstats
