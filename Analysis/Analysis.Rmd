@@ -313,29 +313,13 @@ cd /home/ccaillon/RISG_dDocent_working/raw.vcf
 #Copy the PVCF_filter.sh script from ROD_CADO directory
 cp /home/Shared_Data/ROD_CADO/analysis/raw.vcf/PVCF_filter.sh /home/ccaillon/RISG_dDocent_working/raw.vcf/
 
-#We have to set a new conda environment that has vcflib with a version < v1.0.3
-#vcflib=1.0.3=h0033a41_4 to vcflib=1.0.2=h3198e80_5
-#it also asked to change zlib=1.3.1=hb9d3cd8_2 to zlib=1.2.12
-cat RISG_SNP_Filtering.yml
-conda env create -f RISG_SNP_Filtering.yml
-conda activate RISG_SNP_Filtering
+#Activate conda environment 
+conda activate ROD_CADO
 
 #Run
 ./PVCF_filter.sh TRS 20
 ```
 
-```{bash}
-
-#Test 
-
-cd /home/ccaillon/RISG_dDocent_working/raw.vcf
-
-conda activate ROD_CADO
-
-./PVCF_filter.sh TRS 20
-```
-
-[main_vcfview] Error: cannot write to (null)
 This script will automatically filter a FreeBayes generated VCF file using criteria related to site depth,
 quality versus depth, allelic balance at heterzygous individuals, and paired read representation.
 The script assumes that loci and individuals with low call rates (or depth) have already been removed. 
@@ -348,11 +332,7 @@ Number of additional sites filtered based on properly paired status
 
 Number of sites filtered based on high depth and lower than 2*DEPTH quality score
  338665 of 1902408 
- 
-[main_vcfview] Error: cannot write to (null)
 
-                                                                                                                        
-                                                                                                                        
                                                 Histogram of mean depth per site                                        
      180000 +-------------------------------------------------------------------------------------------------------+   
             |*****    +     +    +    +    +    +     +    +    +    +    +     +    +    +    +    +     +    +    |   
@@ -384,7 +364,6 @@ Number of sites filtered based on high depth and lower than 2*DEPTH quality scor
 The 95% cutoff would be 24
 Would you like to use a different maximum mean depth cutoff than 24, yes or no
 Maximum mean depth cutoff is 24
-no
 
 Number of sites filtered based on maximum mean depth
  79234 of 1555651 
@@ -404,31 +383,18 @@ Number of INDels
  462075 
 
 Number of SNPs with 90% call rate, MAF of 0.01, and excess heterozygous loci removed
-
 Number of SNPs with 90% call rate, MAF of 0.05, and excess heterozygous loci removed
-
 Number of SNPs with 95% call rate, MAF of 0.01, and excess heterozygous loci removed
- 
 Number of SNPs with 95% call rate, MAF of 0.05, and excess heterozygous loci removed
-
 Number of SNPs with 100% call rate, MAF of 0.01, and excess heterozygous loci removed
-
 Number of SNPs with 100% call rate, MAF of 0.05, and excess heterozygous loci removed
- 
 Number of biallelic SNPs with 100% call rate, MAF of 0.01, and excess heterozygous loci removed
- 
 Number of biallelic SNPs with 100% call rate, MAF of 0.05, and excess heterozygous loci removed
 
-
-
-
-
-
-
-rm: cannot remove ‘SNP.TRS.TRSdp5g75.nDNA.Collated.g1.maf01.max2alleles.*.FIL.bcf’: No such file or directory
-mv: cannot stat ‘SNP.TRS.TRSdp5g75.nDNA.*.*.FIL.vcf.gz’: No such file or directory
 Filter stats and filtered VCF files stored in TRS.TRSdp5g75.nDNA.filterstats
+Both are stored in the filtered directory
 
+Now we can continue to work with SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz in the new SNPs directory
 
 Make a new directory within RISG_dDocent_working
 ```{bash}
@@ -436,8 +402,8 @@ cd /home/ccaillon/RISG_dDocent_working
 mkdir RISG_SNPFiltering_working
 cd RISG_SNPFiltering_working
 
-#Link Raw VCF file to new directory
-ln -s ../TotalRawSNPs.vcf.gz .
+#Link SNP filtered VCF file to new directory
+ln -s /home/ccaillon/RISG_dDocent_working/raw.vcf/SNPs/SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz
 ```
 
 
