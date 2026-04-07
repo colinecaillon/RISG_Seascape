@@ -395,7 +395,6 @@ Filter stats and filtered VCF files stored in TRS.TRSdp5g75.nDNA.filterstats
 Both are stored in the filtered directory
 
 Now we can continue to work with SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz in the new SNPs directory
-
 Make a new directory within RISG_dDocent_working
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
