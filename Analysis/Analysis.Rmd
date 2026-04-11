@@ -439,7 +439,7 @@ gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
 
 curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/filter_missing_ind.sh
 chmod +x filter_missing_ind.sh
-./filter_missing_ind.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf SNP.TRSdp10mafMIS.nDNA.FIL
+./filter_missing_ind.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf SNP.TRSdp10mafMI.nDNA.FIL
 ```
 
 
