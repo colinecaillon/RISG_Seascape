@@ -50,7 +50,7 @@ yes
 Proceeding with 60 individuals
 dDocent detects 80 processors available on this system.
 Please enter the maximum number of processors to use for this analysis.
-30
+20
 
 Do you want to quality trim your reads?
 Type yes or no and press [ENTER]?
@@ -206,7 +206,7 @@ yes
 Proceeding with 60 individuals
 dDocent detects 80 processors available on this system.
 Please enter the maximum number of processors to use for this analysis.
-30
+20
 
 Do you want to quality trim your reads?
 Type yes or no and press [ENTER]?
@@ -266,7 +266,7 @@ dDocent version 3.0.0 started Fri Feb 27 08:54:38 EST 2026
 Proceeding with 239 individuals
 dDocent detects 80 processors available on this system.
 Please enter the maximum number of processors to use for this analysis.
-30
+20
 
 Do you want to quality trim your reads?
 Type yes or no and press [ENTER]?
@@ -398,14 +398,18 @@ Now we can continue to work with SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz in the new SN
 Make a new directory within RISG_dDocent_working
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working
-mkdir RISG_SNPFiltering_working
-cd RISG_SNPFiltering_working
+mkdir RISG_SNP_Filtering_working
+cd RISG_SNP_Filtering_working
 
 #Link SNP filtered VCF file to new directory
 ln -s /home/ccaillon/RISG_dDocent_working/raw.vcf/SNPs/SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz
 ```
 
-
-
+Next step is to mark any genotypes with less than 10 reads as missing (stricter depth filter)
+```{bash}
+vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --out SNP.TRSdp10.nDNA.FIL
+#or
+vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --stdout | bcftools view --threads 24 -O z -o SNP.TRSdp10.nDNA.FIL.vcf.gz
+```
 
 
