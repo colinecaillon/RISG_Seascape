@@ -434,7 +434,7 @@ Here it's mostly just to observe the % of missing data within individuals. We ar
 I gzipped all vcf files in this directory before this step to free up space in KITT. I modified the filter_missing_ind script to recognize the gzipped vcf file input.
 ```{bash}
 #To gzip:
-gzip SNP.TRSdp10.nDNA.FIL.recode.vcf
+gzip SNP.TRSdp10.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
 gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
 
 curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/filter_missing_ind.sh
