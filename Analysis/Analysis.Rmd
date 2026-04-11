@@ -407,9 +407,8 @@ ln -s /home/ccaillon/RISG_dDocent_working/raw.vcf/SNPs/SNP.TRS.TRSdp5g75.nDNA.FI
 
 Next step is to mark any genotypes with less than 10 reads as missing (stricter depth filter)
 ```{bash}
-#vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --out SNP.TRSdp10.nDNA.FIL
-#or
-vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --stdout | bcftools view --threads 24 -O z -o SNP.TRSdp10.nDNA.FIL.vcf.gz
+vcftools --vcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --out SNP.TRSdp10.nDNA.FIL
+#vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --stdout | bcftools view --threads 24 -O z -o SNP.TRSdp10.nDNA.FIL.vcf.gz
 #bcftools to compressed output directly
 ```
 
@@ -418,11 +417,11 @@ Outputting VCF file...
 After filtering, kept 2636976 out of a possible 2636976 Sites
 Run Time = 2976.00 seconds
 
-MAF filtering for FreeBayes Output
+MAF filtering for FreeBayes Output. Keeps SNPs with minor allele frequency ≥ 0.1% (extremely permissive because keeping almost all variants).
 ```{bash}
-$ curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/untested/multi.maf.sh
-$ chmod +x multi.maf.sh
-$ multi.maf.sh TRS6newdp10.recode.vcf 0.001 TRS6newdp10maf
+curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/untested/multi.maf.sh
+chmod +x multi.maf.sh #makes script executable
+./multi.maf.sh SNP.TRSdp10.nDNA.FIL.vcf.gz 0.001 SNP.TRSdp10maf.nDNA.FIL.vcf.gz
 ```
 
 
