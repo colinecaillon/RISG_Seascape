@@ -431,15 +431,15 @@ Run Time = 2111.00 seconds
 
 Use a custom script called filter_missing_ind.sh to filter out bad individuals.
 Here it's mostly just to observe the % of missing data within individuals. We are working with a small number of individuals, so it's likely we will not remove any.
-I gzipped all vcf files in this directory before this step to free up space in KITT. I modified the filter_missing_ind script to recognize the gzipped vcf file input.
+I am also gzipping all vcf files little by little in this directory to free up space in KITT.
 ```{bash}
-#To gzip:
-gzip SNP.TRSdp10.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
-gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
-
 curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/filter_missing_ind.sh
 chmod +x filter_missing_ind.sh
 ./filter_missing_ind.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf SNP.TRSdp10mafMI.nDNA.FIL
+
+#To gzip:
+gzip SNP.TRSdp10.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
+gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
 ```
 
 After filtering, kept 239 out of 239 Individuals
@@ -484,6 +484,64 @@ After filtering, kept 206 out of 239 Individuals
 Outputting VCF file...
 After filtering, kept 2616479 out of a possible 2616479 Sites
 Run Time = 1720.00 seconds
+
+```{bash}
+#List of the worst 12 samples:
+cat <(head -1 SNP.TRSdp10mafMI.nDNA.FIL.imiss ) <(mawk '!/F_MI/' SNP.TRSdp10mafMI.nDNA.FIL.imiss | sort -k5 -r -n ) | head -13 | column -t
+```
+
+INDV        N_DATA   N_GENOTYPES_FILTERED  N_MISS   F_MISS
+HC_DB_3041  2616479  0                     2161000  0.825919
+NB_DB_3277  2616479  0                     2135470  0.816162
+M_DB_3257   2616479  0                     2025951  0.774304
+HC_DB_3039  2616479  0                     2020543  0.772237
+BAR_NB_2    2616479  0                     1980649  0.75699
+MW_CB_3406  2616479  0                     1933136  0.738831
+HA_CB_3334  2616479  0                     1918054  0.733067
+MW_CB_3399  2616479  0                     1884969  0.720422
+CS_DB_3004  2616479  0                     1884894  0.720393
+SR_DB_3061  2616479  0                     1868810  0.714246
+SR_DB_3071  2616479  0                     1846989  0.705906
+MW_CB_3405  2616479  0                     1840049  0.703254
+
+Because this step filtered out individuals, I won't use it moving forward, instead I'll keep going with SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz
+
+Use a second custom script pop_missing_filter.sh to filter loci that have high missing data values within a single population.
+for this step, we need the populations file popmap previously created by dDocent.
+Moving forward with three different filtering pathways: popmap filter with matching max-missing filter of 0.1 (more stringent), 0.5 (medium stringency), and 0.8 (less stringent), in order to test different levels of filtering to see if there are significant differences in the results.
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working/RISG_SNP_Filtering_working
+
+#Link popmap file
+ln -s ../popmap
+
+curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/pop_missing_filter.sh
+chmod +x pop_missing_filter.sh
+```
+
+More stringent level with pop matching max-missing filtering of 0.1:
+```{bash}
+$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.1 1 SNP.TRSdp10mafPM9.nDNA.FIL
+```
+Output:
+
+
+
+Medium stringent level with pop matching max-missing filtering of 0.5:
+```{bash}
+$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.5 1 SNP.TRSdp10mafPM5.nDNA.FIL
+```
+Output:
+
+
+
+Less stringent level with pop matching max-missing filtering of 0.8:
+```{bash}
+$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.8 1 SNP.TRSdp10mafPM2.nDNA.FIL
+```
+Output:
+
+
 
 
 
