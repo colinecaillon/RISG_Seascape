@@ -535,7 +535,7 @@ Output:
 After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
 After filtering, kept 25449 out of a possible 2616479 Sites
-Run Time = 363.00 seconds (this time per individual)
+Run Time = 363.00 seconds (this time per population)
 
 So with 0.1 as missingness threshold within each population, it flags loci with more than 10% missing data in that population. It also means that locus must have at least 90% completeness within a population. Because of $4 = 1, any locus that fails >10% missingness in at least one population gets removed. So this filter is meant to eliminate loci that are poorly genotyped in any population.
 
