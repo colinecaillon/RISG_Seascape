@@ -429,7 +429,7 @@ Outputting VCF file...
 After filtering, kept 2616479 out of a possible 2636976 Sites
 Run Time = 2111.00 seconds
 
-Use a custom script called filter_missing_ind.sh to filter out bad individuals.
+Use a custom script called filter_missing_ind.sh to filter out bad individuals = filter on individual missingness.
 Here it's mostly just to observe the % of missing data within individuals. We are working with a small number of individuals, so it's likely we will not remove any.
 I am also gzipping all vcf files little by little in this directory to free up space in KITT.
 ```{bash}
@@ -504,11 +504,19 @@ SR_DB_3061  2616479  0                     1868810  0.714246
 SR_DB_3071  2616479  0                     1846989  0.705906
 MW_CB_3405  2616479  0                     1840049  0.703254
 
+Notes:
+The histogram shows the distribution of % missing data across indivdiuals.
+Diagnostic with .imiss file = outputting individual missingness.
+N_MISS = number of missing genotypes / F_MISS = fraction of missing genotypes.
+Sites/loci are unchanged because this step is only removing individuals.
+
 Because this step filtered out individuals, I won't use it moving forward, instead I'll keep going with SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz
 
 Use a second custom script pop_missing_filter.sh to filter loci that have high missing data values within a single population.
 for this step, we need the populations file popmap previously created by dDocent.
 Moving forward with three different filtering pathways: popmap filter with matching max-missing filter of 0.1 (more stringent), 0.5 (medium stringency), and 0.8 (less stringent), in order to test different levels of filtering to see if there are significant differences in the results.
+The goal of pop_missing_filter.sh is to remove loci/sites that have too much missing data within populations, not to remove individuals.
+I modified the pop_missing_filter script to recognize the gzipped vcf file input.
 ```{bash}
 cd /home/ccaillon/RISG_dDocent_working/RISG_SNP_Filtering_working
 
@@ -521,15 +529,19 @@ chmod +x pop_missing_filter.sh
 
 More stringent level with pop matching max-missing filtering of 0.1:
 ```{bash}
-$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.1 1 SNP.TRSdp10mafPM9.nDNA.FIL
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.1 1 SNP.TRSdp10mafPM9.nDNA.FIL
 ```
 Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 25449 out of a possible 2616479 Sites
+Run Time = 363.00 seconds (this time per individual)
 
-
+So with 0.1 as missingness threshold within each population, it flags loci with more than 10% missing data in that population. It also means that locus must have at least 90% completeness within a population. Because of $4 = 1, any locus that fails >10% missingness in at least one population gets removed. So this filter is meant to eliminate loci that are poorly genotyped in any population.
 
 Medium stringent level with pop matching max-missing filtering of 0.5:
 ```{bash}
-$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.5 1 SNP.TRSdp10mafPM5.nDNA.FIL
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.5 1 SNP.TRSdp10mafPM5.nDNA.FIL
 ```
 Output:
 
@@ -537,12 +549,34 @@ Output:
 
 Less stringent level with pop matching max-missing filtering of 0.8:
 ```{bash}
-$ ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.8 1 SNP.TRSdp10mafPM2.nDNA.FIL
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.8 1 SNP.TRSdp10mafPM2.nDNA.FIL
 ```
 Output:
 
 
+Filter out any sites with less than % overall call rate and MAF of 0.001.
+I'm going to repeat the same filtering level for the overall call rate as the popmap filter step, specific to each vcf filtering pathway.
 
+# more stringent filtering - max-missing of 0.9 
+vcftools --gzvcf TRS6newdp10mafp9.recode.vcf.gz --recode-INFO-all --max-missing 0.9 --maf 0.001 --out TRS6newdp10mafp9g9 --recode
 
+output: 
+After filtering, kept 60 out of 60 Individuals
+Outputting VCF file...
+After filtering, kept 130702 out of a possible 131117 Sites
+Run Time = 29.00 seconds
 
+# medium stringent level of 0.5 
+$ vcftools --gzvcf TRS6newdp10mafp5.recode.vcf.gz --recode-INFO-all --max-missing 0.5 --maf 0.001 --out TRS6newdp10mafp5g5 --recode
+
+output:
+After filtering, kept 60 out of 60 Individuals
+Outputting VCF file...
+After filtering, kept 475519 out of a possible 498511 Sites
+Run Time = 110.00 seconds
+
+# less stringent filtering - max-missing of 0.2
+$ vcftools --gzvcf TRS6newdp10mafp2.recode.vcf.gz --recode-INFO-all --max-missing 0.2 --maf 0.001 --out TRS6newdp10mafp2g2 --recode
+
+output:
 
