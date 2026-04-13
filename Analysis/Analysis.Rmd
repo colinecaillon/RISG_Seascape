@@ -544,39 +544,47 @@ Medium stringent level with pop matching max-missing filtering of 0.5:
 ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.5 1 SNP.TRSdp10mafPM5.nDNA.FIL
 ```
 Output:
-
-
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 566332 out of a possible 2616479 Sites
+Run Time = 752.00 seconds (this time per population)
 
 Less stringent level with pop matching max-missing filtering of 0.8:
 ```{bash}
 ./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.8 1 SNP.TRSdp10mafPM2.nDNA.FIL
 ```
 Output:
-
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 1787524 out of a possible 2616479 Sites
+Run Time = 1702.00 seconds (this time per population)
 
 Filter out any sites with less than % overall call rate and MAF of 0.001.
 I'm going to repeat the same filtering level for the overall call rate as the popmap filter step, specific to each vcf filtering pathway.
 
-# more stringent filtering - max-missing of 0.9 
-vcftools --gzvcf TRS6newdp10mafp9.recode.vcf.gz --recode-INFO-all --max-missing 0.9 --maf 0.001 --out TRS6newdp10mafp9g9 --recode
-
-output: 
+More stringent filtering level with max-missing of 0.9:
+```{bash}
+vcftools --vcf SNP.TRSdp10mafPM9.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.9 --maf 0.001 --out SNP.TRSdp10mafPM9g9.nDNA.FIL --recode
+```
+Output: 
 After filtering, kept 60 out of 60 Individuals
 Outputting VCF file...
 After filtering, kept 130702 out of a possible 131117 Sites
 Run Time = 29.00 seconds
 
-# medium stringent level of 0.5 
-$ vcftools --gzvcf TRS6newdp10mafp5.recode.vcf.gz --recode-INFO-all --max-missing 0.5 --maf 0.001 --out TRS6newdp10mafp5g5 --recode
-
-output:
+Medium stringent filtering level with max-missing of 0.5:
+```{bash}
+$ vcftools --vcf SNP.TRSdp10mafPM5.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.5 --maf 0.001 --out SNP.TRSdp10mafPM5g5.nDNA.FIL --recode
+```
+Output:
 After filtering, kept 60 out of 60 Individuals
 Outputting VCF file...
 After filtering, kept 475519 out of a possible 498511 Sites
 Run Time = 110.00 seconds
 
-# less stringent filtering - max-missing of 0.2
-$ vcftools --gzvcf TRS6newdp10mafp2.recode.vcf.gz --recode-INFO-all --max-missing 0.2 --maf 0.001 --out TRS6newdp10mafp2g2 --recode
-
-output:
+Less stringent filtering level with max-missing of 0.2:
+```{bash}
+$ vcftools --vcf SNP.TRSdp10mafPM2.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.2 --maf 0.001 --out SNP.TRSdp10mafPM2g2.nDNA.FIL --recode
+```
+Output:
 
