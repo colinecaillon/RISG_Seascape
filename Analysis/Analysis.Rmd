@@ -560,31 +560,36 @@ After filtering, kept 1787524 out of a possible 2616479 Sites
 Run Time = 1702.00 seconds (this time per population)
 
 Filter out any sites with less than % overall call rate and MAF of 0.001.
-I'm going to repeat the same filtering level for the overall call rate as the popmap filter step, specific to each vcf filtering pathway.
+Repeat the same filtering level for the overall call rate as the popmap filter step, specific to each vcf filtering pathway.
 
 More stringent filtering level with max-missing of 0.9:
 ```{bash}
 vcftools --vcf SNP.TRSdp10mafPM9.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.9 --maf 0.001 --out SNP.TRSdp10mafPM9g9.nDNA.FIL --recode
 ```
 Output: 
-After filtering, kept 60 out of 60 Individuals
+After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
-After filtering, kept 130702 out of a possible 131117 Sites
-Run Time = 29.00 seconds
+After filtering, kept 25381 out of a possible 25449 Sites
+Run Time = 21.00 seconds
 
 Medium stringent filtering level with max-missing of 0.5:
 ```{bash}
-$ vcftools --vcf SNP.TRSdp10mafPM5.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.5 --maf 0.001 --out SNP.TRSdp10mafPM5g5.nDNA.FIL --recode
+vcftools --vcf SNP.TRSdp10mafPM5.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.5 --maf 0.001 --out SNP.TRSdp10mafPM5g5.nDNA.FIL --recode
 ```
 Output:
-After filtering, kept 60 out of 60 Individuals
+After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
-After filtering, kept 475519 out of a possible 498511 Sites
-Run Time = 110.00 seconds
+After filtering, kept 544397 out of a possible 566332 Sites
+Run Time = 420.00 seconds
 
 Less stringent filtering level with max-missing of 0.2:
 ```{bash}
-$ vcftools --vcf SNP.TRSdp10mafPM2.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.2 --maf 0.001 --out SNP.TRSdp10mafPM2g2.nDNA.FIL --recode
+vcftools --vcf SNP.TRSdp10mafPM2.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.2 --maf 0.001 --out SNP.TRSdp10mafPM2g2.nDNA.FIL --recode
 ```
 Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 1648440 out of a possible 1787524 Sites
+Run Time = 1555.00 seconds
+
 
