@@ -304,7 +304,7 @@ After filtering, kept 25955636 out of a possible 70386649 Sites
 
 ## SNP Filtering
 
-Use PVCF_filter.sh script as a first step filter, it's going to be faster. This script automatically filters genotype calls based on several criteria: genotypes with less than 75% presence across all individuals, a minimum quality score of 20, and a minimum read depth of 5. It also separates nDNA (nuclear DNA) from mtDNA (mitochondrial DNA). Downstream analyses continue with nDNA, separating SNPs and INDELs while retaining only the SNPs.
+Use PVCF_filter.sh script as a first step filter, it's going to be faster. This script automatically filters genotype calls based on several criteria: genotypes with less than 75% presence across all individuals, a minimum quality score of 20, and a minimum read depth of 5 (genotypes with less than 5 reads as missing). It also separates nDNA (nuclear DNA) from mtDNA (mitochondrial DNA). Downstream analyses continue with nDNA, separating SNPs and INDELs while retaining only the SNPs.
 
 ```{bash}
 #We need to run this script within the new directory raw.vcf created by dDocent
@@ -405,20 +405,22 @@ cd RISG_SNP_Filtering_working
 ln -s /home/ccaillon/RISG_dDocent_working/raw.vcf/SNPs/SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz
 ```
 
-Not do minimum a second read depth filter of 10 like Amy or ROD_CADO project, otherwise too much missing data in "bad" individuals (keep dp = 5).
+Do not do a second minimum read depth filter of 10 like Amy or ROD_CADO project, otherwise too much missing data in "bad" individuals (keep dp = 5).
 
 MAF filtering for FreeBayes Output. Keeps SNPs with minor allele frequency ≥ 0.1% (extremely permissive because keeping almost all variants).
-I modified the multi.maf.sh script to recognize the gzipped vcf file input.
+I decompressed the .vcf.gz file before using multi.maf.sh script.
 ```{bash}
 curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/untested/multi.maf.sh
 chmod +x multi.maf.sh #makes script executable
-./multi.maf.sh SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz 0.001 SNP.TRSdp5g75maf.nDNA.FIL
+gunzip -c SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz > SNP.TRS.TRSdp5g75.nDNA.FIL.vcf #decompress .vcf.gz file without removing it
+./multi.maf.sh SNP.TRS.TRSdp5g75.nDNA.FIL.vcf 0.001 SNP.TRSdp5g75maf.nDNA.FIL
+rm SNP.TRS.TRSdp5g75.nDNA.FIL.vcf #then remove heavy .vcf file
 ```
 
 After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
 After filtering, kept 2616479 out of a possible 2636976 Sites
-Run Time = 2111.00 seconds
+Run Time = 1979.00 seconds
 
 Use a custom script called filter_missing_ind.sh to filter out bad individuals = filter on individual missingness.
 Here it's mostly just to observe the % of missing data within individuals. We are working with a small number of individuals, so it's likely we will not remove any.
@@ -426,47 +428,48 @@ I am also gzipping all vcf files little by little in this directory to free up s
 ```{bash}
 curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/filter_missing_ind.sh
 chmod +x filter_missing_ind.sh
-./filter_missing_ind.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf SNP.TRSdp10mafMI.nDNA.FIL
+./filter_missing_ind.sh SNP.TRSdp5g75maf.nDNA.FIL.recode.vcf SNP.TRSdp5g75mafMI.nDNA.FIL
 
-#To gzip:
-gzip SNP.TRSdp10.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
-gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
+#To compress:
+gzip SNP.TRSdp5g75maf.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
+gzip SNP.TRSdp5g75mafMI.nDNA.FIL.recode.vcf
 ```
 
 After filtering, kept 239 out of 239 Individuals
 Outputting Individual Missingness
 After filtering, kept 2616479 out of a possible 2616479 Sites
-Run Time = 263.00 seconds
+Run Time = 292.00 seconds
 
-                                          Histogram of % missing data per individual                                    
-       12 +---------------------------------------------------------------------------------------------------------+   
-          |            +             +            **           +            +             +            +            |   
-          |                                       **          'totalmissin** using (bin($1,binwidth)):(1.0) ******* |   
-          |                                       **                      **                                        |   
-       10 |-+                                     **                      **    ***                               +-|   
-          |                                       **                      **    * *                                 |   
-          |                                     ****  **                  **    * *                                 |   
-          |                                     * **  **                  **    * *                                 |   
-        8 |-+                                   * **  **              **  **    * *                               +-|   
-          |                                     * **  **              **  **    * *                                 |   
-          |                                     * **  *****           **  ***** * *                                 |   
-        6 |-+                               ***** ******* *   **  *********** * * *                               +-|   
-          |                                 * *** *** *** *   **  *** *** *** * * *                                 |   
-          |                               *** *** *** *** *********** *** *** * * *                                 |   
-          |                               *** *** *** *** *** *** *** *** *** * * *                                 |   
-        4 |-+            ***      **      *** *** *** *** *** *** *** *** *** *** **   ***                        +-|   
-          |              * *      **      *** *** *** *** *** *** *** *** *** *** **   * *                          |   
-          |        ***   * *  **  ****  ***** *** *** *** *** *** *** *** *** *** **   * ***                        |   
-          |        * *   * *  **  ** *  * *** *** *** *** *** *** *** *** *** *** **   * * *                        |   
-        2 |-+      * *** * * *** *** **** *** *** *** *** *** *** *** *** *** *** **   * * *****  *****           +-|   
-          |        * * * * * *** *** **** *** *** *** *** *** *** *** *** *** *** **   * * *** *  *   *             |   
-          |  ******* * *** ********* **** *** *** *** *** *** *** *** *** *** *** ****** * *** ****   *****         |   
-          |  ** *  * * * * * *** *** **** *** *** *** *** *** *** *** *** *** *** *** ** *+*** *  *   *+ **         |   
-        0 +---------------------------------------------------------------------------------------------------------+   
-         0.1          0.2           0.3          0.4          0.5          0.6           0.7          0.8          0.9  
-                                                       % of missing data                                                
-                                                                                                                        
-The 85% cutoff would be 0.631647
+                                          Histogram of % missing data per individual
+     Number of Occurrences
+       25 ++-----------+-------------+------------+------------+------------+-------------+------------+-----------++
+          +            +       ****  +            +            'totalmissing' using (bin($1,binwidth)):(1.0) ****** +
+          |                    *  *                                                                                 |
+          |                    *  *                                                                                 |
+          |                    *  *                                                                                 |
+       20 ++                 ***  *                                                                                ++
+          |                  * *  *                                                                                 |
+          |                  * *  *                                                                                 |
+          |               **** *  *                                                                                 |
+       15 ++              *  * *  *  ***                                                                           ++
+          |               *  * *  *  * *            ****                                                            |
+          |            ****  * *  **** *            *  *                                                            |
+          |            *  *  * *  *  * *       **** *  *                                                            |
+          |            *  *  * *  *  * *    ****  * *  *    ****                                                    |
+       10 ++           *  *  * *  *  * ******  *  * *  **** *  *                                                   ++
+          |            *  *  * *  *  * *  * *  *  * *  *  * *  *                                                    |
+          |       **** *  *  * *  *  * *  * *  *  * *  *  * *  *                                                    |
+          |    ****  ***  *  * *  *  * *  * *  *  ***  *  ***  ****                                                 |
+        5 ++   *  *  * *  *  * *  *  * *  * *  *  * *  *  * *  *  *                                                ++
+          |    *  *  * *  *  * *  *  * *  * *  *  * *  *  * *  *  *                                                 |
+          |    *  *  * *  *  * *  *  * *  * *  *  * *  *  * *  *  * ****                                            |
+          |    *  *  * *  *  * *  *  * *  * *  *  * *  *  * *  *  ***  *********    ****   **********               |
+          +    *  *  * *  *  * *  *  * *  * *  *  * *  *  * *  *  * *  *  * *  ******  *****        ************    +
+        0 ++---*************************************************************************************************---++
+          0           0.05          0.1          0.15         0.2          0.25          0.3          0.35         0.4
+                                                       % of missing data
+
+The 85% cutoff would be 0.193592
 Would you like to set a different cutoff, yes or no
 no
 
@@ -474,26 +477,27 @@ Excluding individuals in 'exclude' list
 After filtering, kept 206 out of 239 Individuals
 Outputting VCF file...
 After filtering, kept 2616479 out of a possible 2616479 Sites
-Run Time = 1720.00 seconds
+Run Time = 2029.00 seconds
 
 ```{bash}
-#List of the worst 12 samples:
-cat <(head -1 SNP.TRSdp10mafMI.nDNA.FIL.imiss ) <(mawk '!/F_MI/' SNP.TRSdp10mafMI.nDNA.FIL.imiss | sort -k5 -r -n ) | head -13 | column -t
+#List of the worst 13 samples:
+cat <(head -1 SNP.TRSdp5g75mafMI.nDNA.FIL.imiss ) <(mawk '!/F_MI/' SNP.TRSdp5g75mafMI.nDNA.FIL.imiss | sort -k5 -r -n ) | head -14 | column -t
 ```
 
-INDV        N_DATA   N_GENOTYPES_FILTERED  N_MISS   F_MISS
-HC_DB_3041  2616479  0                     2161000  0.825919
-NB_DB_3277  2616479  0                     2135470  0.816162
-M_DB_3257   2616479  0                     2025951  0.774304
-HC_DB_3039  2616479  0                     2020543  0.772237
-BAR_NB_2    2616479  0                     1980649  0.75699
-MW_CB_3406  2616479  0                     1933136  0.738831
-HA_CB_3334  2616479  0                     1918054  0.733067
-MW_CB_3399  2616479  0                     1884969  0.720422
-CS_DB_3004  2616479  0                     1884894  0.720393
-SR_DB_3061  2616479  0                     1868810  0.714246
-SR_DB_3071  2616479  0                     1846989  0.705906
-MW_CB_3405  2616479  0                     1840049  0.703254
+INDV        N_DATA   N_GENOTYPES_FILTERED  N_MISS  F_MISS
+NB_DB_3277  2616479  0                     977896  0.373745
+HC_DB_3041  2616479  0                     949933  0.363058
+HC_DB_3039  2616479  0                     830048  0.317239
+M_DB_3257   2616479  0                     822398  0.314315
+BAR_NB_2    2616479  0                     772858  0.295381
+MW_CB_3406  2616479  0                     752615  0.287644
+HA_CB_3334  2616479  0                     736631  0.281535
+MW_CB_3399  2616479  0                     710222  0.271442
+MCD_NB_6    2616479  0                     700202  0.267612
+SR_DB_3071  2616479  0                     670155  0.256129
+SR_DB_3061  2616479  0                     666463  0.254718
+MW_CB_3405  2616479  0                     646696  0.247163
+CS_DB_3004  2616479  0                     641953  0.24535
 
 Notes:
 The histogram shows the distribution of % missing data across indivdiuals.
@@ -501,7 +505,7 @@ Diagnostic with .imiss file = outputting individual missingness.
 N_MISS = number of missing genotypes / F_MISS = fraction of missing genotypes.
 Sites/loci are unchanged because this step is only removing individuals.
 
-Because this step filtered out individuals, I won't use it moving forward, instead I'll keep going with SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz
+Because this step filtered out individuals 2 individuals in BAR_NB population (and so only 8 individuals left), I won't use it moving forward, instead I'll keep going with SNP.TRSdp5g75maf.nDNA.FIL.recode.vcf.gz
 
 Use a second custom script pop_missing_filter.sh to filter loci that have high missing data values within a single population.
 for this step, we need the populations file popmap previously created by dDocent.
