@@ -405,6 +405,191 @@ cd RISG_SNP_Filtering_working
 ln -s /home/ccaillon/RISG_dDocent_working/raw.vcf/SNPs/SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz
 ```
 
+Not do minimum a second read depth filter of 10 like Amy or ROD_CADO project, otherwise too much missing data in "bad" individuals (keep dp = 5).
+
+MAF filtering for FreeBayes Output. Keeps SNPs with minor allele frequency ≥ 0.1% (extremely permissive because keeping almost all variants).
+I modified the multi.maf.sh script to recognize the gzipped vcf file input.
+```{bash}
+curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/untested/multi.maf.sh
+chmod +x multi.maf.sh #makes script executable
+./multi.maf.sh SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz 0.001 SNP.TRSdp5g75maf.nDNA.FIL
+```
+
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 2616479 out of a possible 2636976 Sites
+Run Time = 2111.00 seconds
+
+Use a custom script called filter_missing_ind.sh to filter out bad individuals = filter on individual missingness.
+Here it's mostly just to observe the % of missing data within individuals. We are working with a small number of individuals, so it's likely we will not remove any.
+I am also gzipping all vcf files little by little in this directory to free up space in KITT.
+```{bash}
+curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/filter_missing_ind.sh
+chmod +x filter_missing_ind.sh
+./filter_missing_ind.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf SNP.TRSdp10mafMI.nDNA.FIL
+
+#To gzip:
+gzip SNP.TRSdp10.nDNA.FIL.recode.vcf #remove by default the previous .vcf file
+gzip SNP.TRSdp10maf.nDNA.FIL.recode.vcf
+```
+
+After filtering, kept 239 out of 239 Individuals
+Outputting Individual Missingness
+After filtering, kept 2616479 out of a possible 2616479 Sites
+Run Time = 263.00 seconds
+
+                                          Histogram of % missing data per individual                                    
+       12 +---------------------------------------------------------------------------------------------------------+   
+          |            +             +            **           +            +             +            +            |   
+          |                                       **          'totalmissin** using (bin($1,binwidth)):(1.0) ******* |   
+          |                                       **                      **                                        |   
+       10 |-+                                     **                      **    ***                               +-|   
+          |                                       **                      **    * *                                 |   
+          |                                     ****  **                  **    * *                                 |   
+          |                                     * **  **                  **    * *                                 |   
+        8 |-+                                   * **  **              **  **    * *                               +-|   
+          |                                     * **  **              **  **    * *                                 |   
+          |                                     * **  *****           **  ***** * *                                 |   
+        6 |-+                               ***** ******* *   **  *********** * * *                               +-|   
+          |                                 * *** *** *** *   **  *** *** *** * * *                                 |   
+          |                               *** *** *** *** *********** *** *** * * *                                 |   
+          |                               *** *** *** *** *** *** *** *** *** * * *                                 |   
+        4 |-+            ***      **      *** *** *** *** *** *** *** *** *** *** **   ***                        +-|   
+          |              * *      **      *** *** *** *** *** *** *** *** *** *** **   * *                          |   
+          |        ***   * *  **  ****  ***** *** *** *** *** *** *** *** *** *** **   * ***                        |   
+          |        * *   * *  **  ** *  * *** *** *** *** *** *** *** *** *** *** **   * * *                        |   
+        2 |-+      * *** * * *** *** **** *** *** *** *** *** *** *** *** *** *** **   * * *****  *****           +-|   
+          |        * * * * * *** *** **** *** *** *** *** *** *** *** *** *** *** **   * * *** *  *   *             |   
+          |  ******* * *** ********* **** *** *** *** *** *** *** *** *** *** *** ****** * *** ****   *****         |   
+          |  ** *  * * * * * *** *** **** *** *** *** *** *** *** *** *** *** *** *** ** *+*** *  *   *+ **         |   
+        0 +---------------------------------------------------------------------------------------------------------+   
+         0.1          0.2           0.3          0.4          0.5          0.6           0.7          0.8          0.9  
+                                                       % of missing data                                                
+                                                                                                                        
+The 85% cutoff would be 0.631647
+Would you like to set a different cutoff, yes or no
+no
+
+Excluding individuals in 'exclude' list
+After filtering, kept 206 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 2616479 out of a possible 2616479 Sites
+Run Time = 1720.00 seconds
+
+```{bash}
+#List of the worst 12 samples:
+cat <(head -1 SNP.TRSdp10mafMI.nDNA.FIL.imiss ) <(mawk '!/F_MI/' SNP.TRSdp10mafMI.nDNA.FIL.imiss | sort -k5 -r -n ) | head -13 | column -t
+```
+
+INDV        N_DATA   N_GENOTYPES_FILTERED  N_MISS   F_MISS
+HC_DB_3041  2616479  0                     2161000  0.825919
+NB_DB_3277  2616479  0                     2135470  0.816162
+M_DB_3257   2616479  0                     2025951  0.774304
+HC_DB_3039  2616479  0                     2020543  0.772237
+BAR_NB_2    2616479  0                     1980649  0.75699
+MW_CB_3406  2616479  0                     1933136  0.738831
+HA_CB_3334  2616479  0                     1918054  0.733067
+MW_CB_3399  2616479  0                     1884969  0.720422
+CS_DB_3004  2616479  0                     1884894  0.720393
+SR_DB_3061  2616479  0                     1868810  0.714246
+SR_DB_3071  2616479  0                     1846989  0.705906
+MW_CB_3405  2616479  0                     1840049  0.703254
+
+Notes:
+The histogram shows the distribution of % missing data across indivdiuals.
+Diagnostic with .imiss file = outputting individual missingness.
+N_MISS = number of missing genotypes / F_MISS = fraction of missing genotypes.
+Sites/loci are unchanged because this step is only removing individuals.
+
+Because this step filtered out individuals, I won't use it moving forward, instead I'll keep going with SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz
+
+Use a second custom script pop_missing_filter.sh to filter loci that have high missing data values within a single population.
+for this step, we need the populations file popmap previously created by dDocent.
+Moving forward with three different filtering pathways: popmap filter with matching max-missing filter of 0.1 (more stringent), 0.5 (medium stringency), and 0.8 (less stringent), in order to test different levels of filtering to see if there are significant differences in the results.
+The goal of pop_missing_filter.sh is to remove loci/sites that have too much missing data within populations, not to remove individuals.
+I modified the pop_missing_filter script to recognize the gzipped vcf file input.
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working/RISG_SNP_Filtering_working
+
+#Link popmap file
+ln -s ../popmap
+
+curl -L -O https://raw.githubusercontent.com/jpuritz/dDocent/master/scripts/pop_missing_filter.sh
+chmod +x pop_missing_filter.sh
+```
+
+More stringent level with pop matching max-missing filtering of 0.1:
+```{bash}
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.1 1 SNP.TRSdp10mafPM9.nDNA.FIL
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 25449 out of a possible 2616479 Sites
+Run Time = 363.00 seconds (this time per population)
+
+So with 0.1 as missingness threshold within each population, it flags loci with more than 10% missing data in that population. It also means that locus must have at least 90% completeness within a population. Because of $4 = 1, any locus that fails >10% missingness in at least one population gets removed. So this filter is meant to eliminate loci that are poorly genotyped in any population.
+
+Medium stringent level with pop matching max-missing filtering of 0.5:
+```{bash}
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.5 1 SNP.TRSdp10mafPM5.nDNA.FIL
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 566332 out of a possible 2616479 Sites
+Run Time = 752.00 seconds (this time per population)
+
+Less stringent level with pop matching max-missing filtering of 0.8:
+```{bash}
+./pop_missing_filter.sh SNP.TRSdp10maf.nDNA.FIL.recode.vcf.gz popmap 0.8 1 SNP.TRSdp10mafPM2.nDNA.FIL
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 1787524 out of a possible 2616479 Sites
+Run Time = 1702.00 seconds (this time per population)
+
+Filter out any sites with less than % overall call rate and MAF of 0.001.
+Repeat the same filtering level for the overall call rate as the popmap filter step, specific to each vcf filtering pathway.
+
+More stringent filtering level with max-missing of 0.9:
+```{bash}
+vcftools --vcf SNP.TRSdp10mafPM9.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.9 --maf 0.001 --out SNP.TRSdp10mafPM9g9.nDNA.FIL --recode
+```
+Output: 
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 25381 out of a possible 25449 Sites
+Run Time = 21.00 seconds
+
+Medium stringent filtering level with max-missing of 0.5:
+```{bash}
+vcftools --vcf SNP.TRSdp10mafPM5.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.5 --maf 0.001 --out SNP.TRSdp10mafPM5g5.nDNA.FIL --recode
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 544397 out of a possible 566332 Sites
+Run Time = 420.00 seconds
+
+Less stringent filtering level with max-missing of 0.2:
+```{bash}
+vcftools --vcf SNP.TRSdp10mafPM2.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.2 --maf 0.001 --out SNP.TRSdp10mafPM2g2.nDNA.FIL --recode
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 1648440 out of a possible 1787524 Sites
+Run Time = 1555.00 seconds
+
+
+
+
+
+
+FIRST METHOD
+
 Next step is to mark any genotypes with less than 10 reads as missing (stricter depth filter)
 ```{bash}
 vcftools --gzvcf SNP.TRS.TRSdp5g75.nDNA.FIL.vcf.gz --minDP 10 --recode --recode-INFO-all --out SNP.TRSdp10.nDNA.FIL
