@@ -558,7 +558,7 @@ Repeat the same filtering level for the overall call rate as the popmap filter s
 
 More stringent filtering level with max-missing of 0.9:
 ```{bash}
-vcftools --vcf SNP.TRSdp5g75mafPM9.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.9 --maf 0.01 --out SNP.TRSdp5g75mafPM9g9maf1.nDNA.FIL --recode
+vcftools --vcf SNP.TRSdp5g75mafPM9.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.9 --maf 0.05 --out SNP.TRSdp5g75mafPM9g9maf5.nDNA.FIL --recode
 ```
 Output: 
 After filtering, kept 239 out of 239 Individuals
@@ -585,6 +585,42 @@ After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
 After filtering, kept 1648440 out of a possible 1787524 Sites
 Run Time = 1555.00 seconds
+
+Maximum 2 alleles filtering - sometimes more than 3 alleles in SNPs with oysters.
+
+More stringently filtered vcf
+```{bash}
+vcftools --vcf SNP.TRSdp5g75mafPM9g9maf5.nDNA.FIL.recode.vcf --recode --recode-INFO-all --out SNP.TRSdp5g75mafPM9g9maf52A.nDNA.FIL --max-alleles 2
+```
+Output:
+After filtering, kept 239 out of 239 Individuals
+Outputting VCF file...
+After filtering, kept 197634 out of a possible 212590 Sites
+Run Time = 149.00 seconds
+
+Medium stringently filtered vcf
+```{bash}
+vcftools --vcf SNP.TRS6newdp10mafp5g5nDNAmaf05.recode.vcf --recode --recode-INFO-all --out SNP.TRS6newdp10mafp5g5nDNAmaf052A --max-alleles 2
+```
+Output:
+After filtering, kept 60 out of 60 Individuals
+Outputting VCF file...
+After filtering, kept 81872 out of a possible 83242 Sites
+Run Time = 17.00 seconds
+
+Less stringently filtered vcf
+```{bash}
+vcftools --vcf SNP.TRS6newdp10mafp2g2nDNAmaf05.recode.vcf --recode --recode-INFO-all --out SNP.TRS6newdp10mafp2g2nDNAmaf052A --max-alleles 2
+```
+Output: 
+After filtering, kept 60 out of 60 Individuals
+Outputting VCF file...
+After filtering, kept 211290 out of a possible 215841 Sites
+Run Time = 41.00 seconds
+
+
+
+
 
 
 
