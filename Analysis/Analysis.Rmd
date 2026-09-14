@@ -321,7 +321,7 @@ conda activate ROD_CADO
 ```
 
 This script will automatically filter a FreeBayes generated VCF file using criteria related to site depth,
-quality versus depth, allelic balance at heterzygous individuals, and paired read representation.
+quality versus depth, allelic balance at heterozygous individuals, and paired read representation.
 The script assumes that loci and individuals with low call rates (or depth) have already been removed. 
 
 Number of sites filtered based on allele balance at heterozygous loci, locus quality, and mapping quality / Depth
