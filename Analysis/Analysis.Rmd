@@ -504,10 +504,10 @@ Diagnostic with .imiss file = outputting individual missingness.
 N_MISS = number of missing genotypes / F_MISS = fraction of missing genotypes.
 Sites/loci are unchanged because this step is only removing individuals.
 
-Because this step filtered out individuals 2 individuals in BAR_NB population (and so only 8 individuals left), I won't use this filter moving forward, instead I'll keep going with SNP.TRSdp5g75maf.nDNA.FIL.recode.vcf.gz
+This filter the 33 "worst" individuals out of 239 regarding their % missing data. Because this step filtered out 2 individuals in BAR_NB population (and so only 8 individuals left), I won't use this filter moving forward, instead I'll keep going with SNP.TRSdp5g75maf.nDNA.FIL.recode.vcf.gz
 
 Use a second custom script pop_missing_filter.sh to filter loci that have high missing data values within a single population.
-for this step, we need the populations file popmap previously created by dDocent.
+For this step, we need the populations file popmap previously created by dDocent.
 Moving forward with three different filtering pathways: popmap filter with matching max-missing filter of 0.1 (more stringent), 0.5 (medium stringency), and 0.8 (less stringent), in order to test different levels of filtering to see if there are significant differences in the results.
 The goal of pop_missing_filter.sh is to remove loci/sites that have too much missing data within populations, not to remove individuals.
 I modified the pop_missing_filter script to recognize the gzipped vcf file input.
