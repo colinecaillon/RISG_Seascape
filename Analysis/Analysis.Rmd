@@ -570,6 +570,9 @@ Run Time = 220.00 seconds
 Medium stringent filtering level with max-missing of 0.5:
 ```{bash}
 vcftools --vcf SNP.TRSdp5g75mafPM5.nDNA.FIL.recode.vcf --recode-INFO-all --max-missing 0.5 --maf 0.01 --out SNP.TRSdp5g75mafPM5g5maf1.nDNA.FIL --recode
+
+#To compress:
+gzip SNP.TRSdp5g75mafPM5g5maf1.nDNA.FIL.recode.vcf
 ```
 Output:
 After filtering, kept 239 out of 239 Individuals
@@ -600,10 +603,10 @@ Medium stringently filtered vcf
 vcftools --vcf SNP.TRSdp5g75mafPM5g5maf1.nDNA.FIL.recode.vcf --recode --recode-INFO-all --out SNP.TRSdp5g75mafPM5g5maf1.2A.nDNA.FIL --max-alleles 2
 ```
 Output:
-After filtering, kept 60 out of 60 Individuals
+After filtering, kept 239 out of 239 Individuals
 Outputting VCF file...
-After filtering, kept 81872 out of a possible 83242 Sites
-Run Time = 17.00 seconds
+After filtering, kept 1311457 out of a possible 1469084 Sites
+Run Time = 1042.00 seconds
 
 Less stringently filtered vcf
 ```{bash}
@@ -611,4 +614,4 @@ vcftools --vcf SNP.TRSdp5g75mafPM2g2maf1.nDNA.FIL.recode.vcf --recode --recode-I
 ```
 Output: not done.
 
-
+-> Use SNP.TRSdp5g75mafPM9g9maf1.2A.nDNA.FIL.recode.vcf file for outlier detection.
