@@ -5,5 +5,34 @@ date: "2026-09-15"
 output: github_document
 ---
 
+# Detect candidate loci under selection
+
+In 'RISG_dDocent_working' directory, make new directory for outlier detection and link vcf files and popmap file.
+```{bash}
+cd /home/ccaillon/RISG_dDocent_working
+mkdir RISG_Outlier_Detection_working
+cd RISG_Outlier_Detection_working
+
+cp ../RISG_SNP_Filtering_working/SNP.TRSdp5g75mafPM9g9maf1.2A.nDNA.FIL.recode.vcf .
+cp ../RISG_SNP_Filtering_working/popmap .
+```
+
+## 1. pcadapt
+
+Assumes that genetic variants (SNPs) that are excessively correlated with population structure are outliers, making them strong candidates for being under natural selection. It first captures the overarching population structure by performing PCA on centered and scaled genotype data. It infers structure directly from the genetic data, doesn't required to group individuals into explicit populations beforehand.
+
+Load in R:
+```{r}
+# Install and load pcadapt
+#install.packages("pcadapt")
+library(pcadapt)
+```
+
+```{r}
+# Convert VCF file to pcadapt format
+vcf2pcadapt("SNP.TRSdp5g75mafPM9g9maf1.2A.nDNA.FIL.recode.vcf", output = "SNP.pcadapt", allele.sep = c("/", "|"))
+filename <- read.pcadapt("SNP.pcadapt", type = "pcadapt")
+```
+
 
 
