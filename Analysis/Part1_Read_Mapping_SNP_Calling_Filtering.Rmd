@@ -1,5 +1,5 @@
 ---
-title: "Analysis"
+title: "Part1_Read_Mapping_SNP_Calling_Filtering"
 author: "Coline Caillon"
 date: '2026-02-11'
 output: github_document
