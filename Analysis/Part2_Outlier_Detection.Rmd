@@ -34,5 +34,82 @@ vcf2pcadapt("SNP.TRSdp5g75mafPM9g9maf1.2A.nDNA.FIL.recode.vcf", output = "SNP.pc
 filename <- read.pcadapt("SNP.pcadapt", type = "pcadapt")
 ```
 
+```{r}
+# Choosing the number K of Principal Components
+# We start off with a large number of PCs
+RISGpops <- pcadapt(input = filename, K = 20)
+```
 
+```{r}
+# Plot the likelihoods using a scree plot
+plot(RISGpops, option = "screeplot")
+```
+
+```{r}
+# Plotting likelihoods again, but with 10 Principal Components
+plot(RISGpops, option = "screeplot", K = 10)
+```
+
+```{r}
+# Create population designations
+poplist.names <- c(rep("BAR", 10), rep("BIS", 10), rep("CS", 20), rep("GB", 10), rep("HA", 20),
+                   rep("HC", 20), rep("HI", 20), rep("HO", 20), rep("KIC", 10), rep("MCD", 9),
+                   rep("M", 20), rep("MW", 20), rep("NB", 20), rep("PVD", 10), rep("SR", 20))
+```
+
+```{r}
+# Create estuary designations
+estuarylist.names <- ifelse(poplist.names %in% c("BAR", "BIS", "GB", "KIC", "MCD", "PVD"), "NB",
+                            ifelse(poplist.names %in% c("CS", "HC", "M", "NB", "SR"), "DB",
+                                   ifelse(poplist.names %in% c("HA", "HI", "HO", "MW"), "CB",
+                                          NA)))
+```
+
+```{r}
+library(ggplot2)
+
+pca.pop <- as.data.frame(RISGpops$score)
+pca.pop$Populations <- poplist.names
+
+# Define colors and shapes for each population
+pop_fills <- c("BIS"="#004700", "MCD"="#006b00", "GB"="#008f00", "KIC"="#19ba19", "BAR"="#7fd97f","PVD"="#ccefcc",
+                "CS"="#00007f", "NB"="#0000bf", "SR"="#0000ff", "M"="#5959ff", "HC"="#b2b2ff",
+                "HI"="#990000", "HO"="#d90000", "HA"="#ff3232", "MW"="#ff7373")
+pop_colors <- c("BIS"="white", "MCD"="white", "GB"="white", "KIC"="white", "BAR"="white","PVD"="white",
+                "CS"="white", "NB"="white", "SR"="white", "M"="white", "HC"="white",
+                "HI"="white", "HO"="white", "HA"="white", "MW"="white")
+pop_shapes <- c("BIS"=21, "MCD"=21, "GB"=21, "KIC"=21, "BAR"=21,"PVD"=21,
+                "CS"=21, "NB"=21, "SR"=21, "M"=21, "HC"=21,
+                "HI"=21, "HO"=21, "HA"=21, "MW"=21)
+
+# Make PCA plot
+ggplot(pca.pop, aes(x = V1, y = V2, color = Populations, fill = Populations, shape = Populations)) +
+  geom_point(size = 3) +
+  scale_fill_manual(values = pop_fills) +
+  scale_color_manual(values = pop_colors) +
+  scale_shape_manual(values = pop_shapes) +
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(color="black", fill=NA, linewidth=0.5),
+        panel.grid.major = element_line(color="gray90", linewidth=0.15),
+        panel.grid.minor = element_blank(),
+        axis.line = element_line(0.2, colour = "black"),
+        axis.text.x = element_text(color="black", size=9),
+        axis.text.y = element_text(color="black", size=9),
+        axis.ticks = element_line(color = "black"),
+        axis.title.x = element_text(color="black", size=9),
+        axis.title.y = element_text(color="black", size=9),
+        legend.position = "none") +
+  labs(x = "PC1", y = "PC2")
+```
+
+```{r}
+# Score Plot
+# Plot the first two PCs
+plot(RISGpops, option = "scores", pop = poplist.names)
+```
+
+```{r}
+# PCA plot with PC3 and 4
+plot(RISGpops, option = "scores", i = 3, j = 4, pop = estuarylist.names)
+```
 
