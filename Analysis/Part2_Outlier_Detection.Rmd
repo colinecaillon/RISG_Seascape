@@ -82,7 +82,7 @@ pop_shapes <- c("BIS"=21, "MCD"=21, "GB"=21, "KIC"=21, "BAR"=21,"PVD"=21,
                 "CS"=21, "NB"=21, "SR"=21, "M"=21, "HC"=21,
                 "HI"=21, "HO"=21, "HA"=21, "MW"=21)
 
-# Make PCA plot
+# Make score plot
 ggplot(pca.pop, aes(x = V1, y = V2, color = Populations, fill = Populations, shape = Populations)) +
   geom_point(size = 3) +
   scale_fill_manual(values = pop_fills) +
@@ -111,5 +111,18 @@ plot(RISGpops, option = "scores", pop = poplist.names)
 ```{r}
 # PCA plot with PC3 and 4
 plot(RISGpops, option = "scores", i = 3, j = 4, pop = estuarylist.names)
+```
+
+Evaluating LD in dataset -> looking to see if loadings are clustered in certain genomic regions (following https://bcm-uga.github.io/pcadapt/articles/pcadapt.html#f--linkage-disequilibrium-ld-thinning)
+
+Linkage disequilibrium (LD) = non-random association of alleles at two or more different loci in a population, meaning certain combinations of alleles are inherited together more or less often than expected by chance.
+
+Inversion -> unusually strong/extended LD across a large genomic region.
+Clues of inversion: PCA shows 3 discrete clusters and the SNPs driving the separation are concentrated on one chromosome.
+
+```{r}
+par(mfrow = c(2, 2))
+for (i in 1:4)
+  plot(RISGpops$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
 ```
 
