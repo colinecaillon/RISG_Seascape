@@ -44,11 +44,7 @@ RISGpops <- pcadapt(input = filename, K = 20)
 # Plot the likelihoods using a scree plot
 plot(RISGpops, option = "screeplot")
 ```
-
-```{r}
-# Plotting likelihoods again, but with 10 Principal Components
-plot(RISGpops, option = "screeplot", K = 10)
-```
+Cattell’s rule indicates K = 6.
 
 ```{r}
 # Create population designations
@@ -116,13 +112,39 @@ plot(RISGpops, option = "scores", i = 3, j = 4, pop = estuarylist.names)
 Evaluating LD in dataset -> looking to see if loadings are clustered in certain genomic regions (following https://bcm-uga.github.io/pcadapt/articles/pcadapt.html#f--linkage-disequilibrium-ld-thinning)
 
 Linkage disequilibrium (LD) = non-random association of alleles at two or more different loci in a population, meaning certain combinations of alleles are inherited together more or less often than expected by chance.
+-> can affect ascertainment of population structure, dense SNP data should account for LD in their genome scans.
 
-Inversion -> unusually strong/extended LD across a large genomic region.
+Inversion -> unusually strong/extended LD across a large genomic region = regions of low recombination.
 Clues of inversion: PCA shows 3 discrete clusters and the SNPs driving the separation are concentrated on one chromosome.
 
 ```{r}
-par(mfrow = c(2, 2))
-for (i in 1:4)
+# To evaluate if LD might be an issue for dataset, display the loadings (contributions of each SNP to the PC) and evaluate if the loadings are clustered in a single or several genomic regions.
+par(mfrow = c(2, 3))
+for (i in 1:6)
   plot(RISGpops$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
+```
+We see that PC2 is determined by two genomic regions of strong LD, also maybe one region in PC1.
+We should therefore thin SNPs in order to compute the PCS = apply LD thinning.
+I'm going to use the default values for window size and r2 threshold for pcadapt (size = 200, thr = 0.1).
+
+```{r}
+# Performing SNP thinning in order to compute PCs
+res <- pcadapt(filename, K = 20, LD.clumping = list(size = 200, thr = 0.1))
+plot(res, option = "screeplot")
+```
+
+After SNP thinning, we choose K = 5.
+
+```{r}
+res <- pcadapt(filename, K = 5, LD.clumping = list(size = 200, thr = 0.1))
+par(mfrow = c(2, 3))
+for (i in 1:5)
+  plot(res$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
+```
+I still see these stong LD regions in PC2, and now also in PC4.
+
+
+```{r}
+plot(res)
 ```
 
