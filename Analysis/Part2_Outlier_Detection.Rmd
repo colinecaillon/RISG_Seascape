@@ -125,26 +125,45 @@ for (i in 1:6)
 ```
 We see that PC2 is determined by two genomic regions of strong LD, also maybe one region in PC1.
 We should therefore thin SNPs in order to compute the PCS = apply LD thinning.
-I'm going to use the default values for window size and r2 threshold for pcadapt (size = 200, thr = 0.1).
+I'm going to use the default values for window size and r2 threshold for pcadapt (size = 200, thr = 0.1 -> good general starting point and conservative choice for thr).
+However I still see these two strong LD regions in PC2, and now also in PC4 -> I will modify parameters of SNP thinning.
+- size = window size -> the number of SNPs considered around each SNP, not a physical distance in bp (size = 500 more aggressive genomic thinning if strong/long-range LD).
+- thr = r² threshold -> SNPs with LD above this threshold are thinned so that highly correlated markers don't disproportionately influence PCA (thr = 0.05 very stringent if strong LD or very dense data).
 
 ```{r}
 # Performing SNP thinning in order to compute PCs
-res <- pcadapt(filename, K = 20, LD.clumping = list(size = 200, thr = 0.1))
+res <- pcadapt(filename, K = 20, LD.clumping = list(size = 1000, thr = 0.1))
 plot(res, option = "screeplot")
 ```
 
-After SNP thinning, we choose K = 5.
+After SNP thinning, we choose K = 4.
 
 ```{r}
-res <- pcadapt(filename, K = 5, LD.clumping = list(size = 200, thr = 0.1))
-par(mfrow = c(2, 3))
-for (i in 1:5)
+res <- pcadapt(filename, K = 4, LD.clumping = list(size = 500, thr = 0.1))
+par(mfrow = c(2, 2))
+for (i in 1:4)
   plot(res$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
 ```
-I still see these stong LD regions in PC2, and now also in PC4.
-
 
 ```{r}
-plot(res)
+plot(res, option = "manhattan")
 ```
 
+```{r}
+res$singular.values
+```
+
+Choosing a cutoff for outlier detection
+```{r}
+library(qvalue) #transforms p-values into q-values
+
+qval <- qvalue(res$pvalues)$qvalues
+alpha <- 0.1 #expected false discovery rate lower than 10%
+
+# Save outliers
+pcadapt.outliers <- which(qval < alpha)
+length(pcadapt.outliers)
+
+```
+
+7141 outliers
