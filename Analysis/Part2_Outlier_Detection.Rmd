@@ -17,7 +17,13 @@ cp ../RISG_SNP_Filtering_working/SNP.TRSdp5g75mafPM9g9maf1.2A.nDNA.FIL.recode.vc
 cp ../RISG_SNP_Filtering_working/popmap .
 ```
 
-## 1. pcadapt
+I am going to combine three methods to detect outliers:
+- PCAdapt: assumption-light; detects outliers associated with genetic structure, but may overidentify candidates
+- OutFLANK: more stringent; identifies outliers based on Fst differentiation
+- LFMM: best suited for genotype–environment associations, while accounting for population structure.
+(BayeScan not used as old Fst-based method; generally less powerful than other approaches)
+
+## 1. PCAdapt
 
 Assumes that genetic variants (SNPs) that are excessively correlated with population structure are outliers, making them strong candidates for being under natural selection. It first captures the overarching population structure by performing PCA on centered and scaled genotype data. It infers structure directly from the genetic data, doesn't required to group individuals into explicit populations beforehand.
 
@@ -98,6 +104,8 @@ ggplot(pca.pop, aes(x = V1, y = V2, color = Populations, fill = Populations, sha
   labs(x = "PC1", y = "PC2")
 ```
 
+We clearly see 3 clusters per bay, this is characteristic of inversions -> we need to look into the 3 genotypes of these inversions for each bay.
+
 ```{r}
 # Score Plot
 # Plot the first two PCs
@@ -119,27 +127,35 @@ Clues of inversion: PCA shows 3 discrete clusters and the SNPs driving the separ
 
 ```{r}
 # To evaluate if LD might be an issue for dataset, display the loadings (contributions of each SNP to the PC) and evaluate if the loadings are clustered in a single or several genomic regions.
-par(mfrow = c(2, 3))
-for (i in 1:6)
+par(mfrow = c(2, 2))
+for (i in 1:4)
   plot(RISGpops$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
 ```
-We see that PC2 is determined by two genomic regions of strong LD, also maybe one region in PC1.
+We see that PC2 and PC3 are determined by two genomic regions of strong LD, also maybe one region in PC1.
 We should therefore thin SNPs in order to compute the PCS = apply LD thinning.
 I'm going to use the default values for window size and r2 threshold for pcadapt (size = 200, thr = 0.1 -> good general starting point and conservative choice for thr).
 However I still see these two strong LD regions in PC2, and now also in PC4 -> I will modify parameters of SNP thinning.
 - size = window size -> the number of SNPs considered around each SNP, not a physical distance in bp (size = 500 more aggressive genomic thinning if strong/long-range LD).
 - thr = r² threshold -> SNPs with LD above this threshold are thinned so that highly correlated markers don't disproportionately influence PCA (thr = 0.05 very stringent if strong LD or very dense data).
+It's better to increase the size value until the clusters disappear from PC loadings (these inversion regions are large), because a thr = 0.1 is already very low.
 
 ```{r}
 # Performing SNP thinning in order to compute PCs
-res <- pcadapt(filename, K = 20, LD.clumping = list(size = 1000, thr = 0.1))
+res <- pcadapt(filename, K = 20, LD.clumping = list(size = 10000, thr = 0.1))
 plot(res, option = "screeplot")
 ```
 
 After SNP thinning, we choose K = 4.
 
 ```{r}
-res <- pcadapt(filename, K = 4, LD.clumping = list(size = 500, thr = 0.1))
+res <- pcadapt(filename, K = 4, LD.clumping = list(size = 5000, thr = 0.1))
+par(mfrow = c(2, 2))
+for (i in 1:4)
+  plot(res$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
+```
+
+```{r}
+res <- pcadapt(filename, K = 4, LD.clumping = list(size = 7500, thr = 0.1))
 par(mfrow = c(2, 2))
 for (i in 1:4)
   plot(res$loadings[, i], pch = 19, cex = .3, ylab = paste0("Loadings PC", i))
@@ -147,6 +163,7 @@ for (i in 1:4)
 
 ```{r}
 plot(res, option = "manhattan")
+# The cluster/inversion regions will be still visible on the Manhattan plot, it's normal. We want the clusters to disappear from the background on the PC loadings though.
 ```
 
 ```{r}
@@ -154,11 +171,12 @@ res$singular.values
 ```
 
 Choosing a cutoff for outlier detection
+We can be more strict here with alpha = 0.05 as PCAdapt has less assumptions and overpick outliers 
 ```{r}
 library(qvalue) #transforms p-values into q-values
 
 qval <- qvalue(res$pvalues)$qvalues
-alpha <- 0.1 #expected false discovery rate lower than 10%
+alpha <- 0.05 #expected false discovery rate lower than 5%
 
 # Save outliers
 pcadapt.outliers <- which(qval < alpha)
@@ -166,4 +184,4 @@ length(pcadapt.outliers)
 
 ```
 
-7141 outliers
+
